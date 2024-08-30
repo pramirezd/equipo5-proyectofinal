@@ -59,25 +59,22 @@ const getUserById = async (id) => {
     throw new Error("Hubo un error con la operacion GETUSERBYID");
   }
 };
-const updateUser = async (
-  name,
-  lastname,
-  address,
-  phone,
-  email,
-  password,
-  isadmin,
-  id
-) => {
+const updateUser = async (fieldsToUpdate, id) => {
   try {
+    const keys = Object.keys(fieldsToUpdate);
+    const values = Object.values(fieldsToUpdate);
+
+    const setClause = keys
+      .map((key, index) => `${key}=$${index + 1}`)
+      .join(", ");
+
     const query = await pool.query(
       `
       UPDATE users
-      SET name=$1, lastname=$2, address=$3, phone=$4, email=$5, password=$6, isadmin=$7
-      WHERE id = $8
+      SET ${setClause} WHERE id = $${keys.length + 1}
       RETURNING *
       `,
-      [name, lastname, address, phone, email, password, isadmin, id]
+      [...values, id]
     );
     return query.rows[0];
   } catch (error) {

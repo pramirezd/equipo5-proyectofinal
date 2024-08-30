@@ -167,17 +167,18 @@ const myProfile = async (req, res) => {
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const { name, lastname, address, phone, email, password, isadmin } = req.body;
+
+  const fieldsToUpdate = {};
+  if (name) fieldsToUpdate.name = name;
+  if (lastname) fieldsToUpdate.lastname = lastname;
+  if (address) fieldsToUpdate.address = address;
+  if (phone) fieldsToUpdate.phone = phone;
+  if (email) fieldsToUpdate.email = email;
+  if (password) fieldsToUpdate.password = password;
+  if (isadmin !== undefined) fieldsToUpdate.isadmin = isadmin;
+
   try {
-    const user = await userModel.updateUser(
-      name,
-      lastname,
-      address,
-      phone,
-      email,
-      password,
-      isadmin,
-      id
-    );
+    const user = await userModel.updateUser(fieldsToUpdate, id);
     console.log(user);
     return res.status(200).json({
       message: "Usuario actualizado",
