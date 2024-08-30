@@ -21,6 +21,10 @@ router.delete(
   userController.deleteUser
 );
 router.get("/myProfile", AuthMiddleware.authToken, userController.myProfile);
-//FALTA para actualizar la informacion de usuario
-
+router.put(
+  "/user/:id",
+  AuthMiddleware.authToken,
+  AuthMiddleware.isAdmin,
+  userController.updateUser
+);
 export default router;
