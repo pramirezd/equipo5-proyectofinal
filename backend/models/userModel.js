@@ -50,20 +50,46 @@ const createUser = async ({
     throw new Error("Hubo un error con la operacion CREATEUSER");
   }
 };
-const getUserById = async(id)=>{
+const getUserById = async (id) => {
   try {
-    const query = await pool.query('SELECT * FROM users WHERE id = $1', [id])
-    return query.rows[0]
+    const query = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    return query.rows[0];
   } catch (error) {
     console.error(error);
     throw new Error("Hubo un error con la operacion GETUSERBYID");
   }
-}
-//FALTA Modelo para actualizar la informacion de usuario
+};
+const updateUser = async (
+  name,
+  lastname,
+  address,
+  phone,
+  email,
+  password,
+  isadmin,
+  id
+) => {
+  try {
+    const query = await pool.query(
+      `
+      UPDATE users
+      SET name=$1, lastname=$2, address=$3, phone=$4, email=$5, password=$6, isadmin=$7
+      WHERE id = $8
+      RETURNING *
+      `,
+      [name, lastname, address, phone, email, password, isadmin, id]
+    );
+    return query.rows[0];
+  } catch (error) {
+    console.error(error);
+    throw new Error("Hubo un error con la operacion UPDATEUSER");
+  }
+};
 export const userModel = {
   getUsers,
   findUser,
   deleteUser,
   createUser,
   getUserById,
+  updateUser,
 };
