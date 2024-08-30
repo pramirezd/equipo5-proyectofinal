@@ -74,6 +74,15 @@ const updateProduct = async (req, res) => {
   const { name, description, price, stock, category_id, brand } = req.body;
   const img_url = req.file ? req.file.path : null;
 
+  const fieldsToUpdate = {};
+  if (name) fieldsToUpdate.name = name;
+  if (description) fieldsToUpdate.description = description;
+  if (price) fieldsToUpdate.price = price;
+  if (stock) fieldsToUpdate.stock = stock;
+  if (category_id) fieldsToUpdate.category_id = category_id;
+  if (brand) fieldsToUpdate.brand = brand;
+  if (img_url) fieldsToUpdate.img_url = img_url;
+
   try {
     const product = await productModel.getProductById(id);
     if (!product) {
@@ -81,15 +90,7 @@ const updateProduct = async (req, res) => {
         message: "Producto no encontrado",
       });
     }
-    const updatedProduct = await productModel.updateProduct(id, {
-      name,
-      description,
-      price,
-      stock,
-      category_id,
-      img_url,
-      brand,
-    });
+    const updatedProduct = await productModel.updateProduct(fieldsToUpdate, id);
 
     return res.status(200).json({
       message: "Producto actualizado correctamente",
@@ -107,5 +108,5 @@ export const productController = {
   product,
   createProduct,
   deleteProduct,
-  updateProduct
+  updateProduct,
 };

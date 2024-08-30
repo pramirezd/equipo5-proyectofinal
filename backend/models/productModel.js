@@ -74,27 +74,23 @@ const getProductByName = async (name) => {
   }
 };
 //Falta terminar
-const updateProduct = async (
-  id,
-  { name, description, price, stock, category_id, img_url, brand }
-) => {
+const updateProduct = async (fieldsToUpdate, id) => {
   try {
-    const query = `
-      UPDATE products 
-      SET name = $1, description = $2, price = $3, stock = $4, category_id = $5, img_url = $6, brand = $7
-      WHERE id = $8
-      RETURNING *`;
-    const values = [
-      name,
-      description,
-      price,
-      stock,
-      category_id,
-      img_url,
-      brand,
-      id,
-    ];
-    const result = await pool.query(query, values);
+    const keys = Object.keys(fieldsToUpdate);
+    const values = Object.values(fieldsToUpdate);
+
+    const setClause = keys
+      .map((key, index) => `${key}=$${index + 1}`)
+      .join(", ");
+
+    const result = await pool.query(
+      `
+      UPDATE products
+      SET ${setClause} WHERE id = $${keys.length + 1}
+      RETURNING *
+      `,
+      [...values, id]
+    );
     return result.rows[0];
   } catch (error) {
     console.error("Error al actualizar el producto:", error);
@@ -107,5 +103,5 @@ export const productModel = {
   deleteProductById,
   createProduct,
   getProductByName,
-  updateProduct
+  updateProduct,
 };
