@@ -7,19 +7,19 @@ const router = express.Router();
 
 router.get(
   "/user/:user_id",
-  // AuthMiddleware.authToken,
+  AuthMiddleware.authToken,
   favController.getFovorites
 );
 
 router.post(
   "/user/:user_id",
-  // AuthMiddleware.authToken,
+  AuthMiddleware.authToken,
   favController.addFavoriteUserProduct
 );
 
 router.delete(
   "/user/:user_id/product/:product_id",
-  // AuthMiddleware.authToken,
+  AuthMiddleware.authToken,
   favController.removeFavoriteProduct
 );
 
