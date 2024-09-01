@@ -1,6 +1,13 @@
-# Hito 1 - Equipo 5 Proyecto Final G62
+# Equipo 5 Proyecto Final G62
 
-## Hito 1 en presentación:
+## Hito 2:
+- Se disponibiliza la rama main para contar con el entregable del hito 2, correspondiente al front.
+
+- Considerar la carpeta `/frontend` para el contenido y la evaluación del entregable
+
+- Dentro de la carpeta `/frontend`, utilizar el comando `npm install` para instalar las dependencias y `npm run dev` para ejecutar el proyecto.
+
+### Hito 1:
 - Se ha disponibilizado una presentación que contiene los 5 puntos solicitados.
 
 - Estos puntos son:
