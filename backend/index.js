@@ -10,6 +10,7 @@ import productRoutes from './routes/product.routes.js'
 import categoryRoutes from './routes/category.routes.js'
 import userRoutes from './routes/user.routes.js'
 import cartRoutes from './routes/carts.routes.js'
+import orderRoutes from './routes/order.routes.js'
 //Comprobar que la conexion a la base de datos es exitosa
 dotenv.config();
 pool
@@ -41,6 +42,8 @@ app.use("/easycommerce/categories", categoryRoutes)
 app.use("/easycommerce/users", userRoutes)
 //Rutas de los carritos
 app.use("/easycommerce/cart", cartRoutes)
+//Rutas de las ordenes
+app.use("/easycommerce/orders", orderRoutes)
 
 
 //Iniciar servidor
