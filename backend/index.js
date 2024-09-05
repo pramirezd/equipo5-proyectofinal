@@ -11,6 +11,7 @@ import categoryRoutes from "./routes/category.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import cartRoutes from "./routes/carts.routes.js";
 import favoritesRoutes from "./routes/favorites.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 
 //Comprobar que la conexion a la base de datos es exitosa
 dotenv.config();
@@ -46,6 +47,8 @@ app.use("/easycommerce/users", userRoutes);
 app.use("/easycommerce/cart", cartRoutes);
 //Rutas de los productos favoritos
 app.use("/easycommerce/favorites", favoritesRoutes);
+//Rutas de las ordenes
+app.use("/easycommerce/orders", orderRoutes);
 
 //Iniciar servidor
 app.listen(port, () => {
