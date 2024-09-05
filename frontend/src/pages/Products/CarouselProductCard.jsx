@@ -1,6 +1,6 @@
 import React from "react";
 
-const CarouselProductCard = ({ name, description, price, image, seller }) => {
+const CarouselProductCard = ({ name, description, price, image, seller, onAddToCart }) => {
   return (
     <div className="flex flex-col justify-center items-center mt-7">
       <div className="flex gap-3 rounded-lg p-7 shadow-lg">
@@ -20,14 +20,17 @@ const CarouselProductCard = ({ name, description, price, image, seller }) => {
             <p className="font-bold text-2xl text-green-600">${price}</p>
             <p className="font-thin">Credit or Debit</p>
           </div>
-          <button className="rounded-lg p-2 bg-blue-500 text-white">
+          <button
+            className="rounded-lg p-2 bg-blue-500 text-white"
+            onClick={onAddToCart}
+          >
             Add To Cart
           </button>
         </div>
         <div className="">
           <img
             className="object-cover object-center w-full rounded-lg h-96 p-4"
-            src={image}
+            src={`http://localhost:5000/${image}`}
             alt={name}
           />
         </div>
