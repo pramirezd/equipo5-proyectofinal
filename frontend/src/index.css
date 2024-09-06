@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* styles.css */
+html {
+    overflow-y: scroll; /* Forzar la barra de desplazamiento vertical a ser visible siempre */
+  }
+  
