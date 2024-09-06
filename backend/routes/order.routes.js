@@ -1,18 +1,18 @@
 import { orderController } from "../controllers/orderController.js";
-import { Router } from 'express'
+import express from 'express'
 
-const orderRouter = Router();
+const router = express.Router();
 
 //Ruta para obtener las ordenes de un usuario
-orderRouter.get('/orders/:id', orderController.getUserOrders);
+router.get('/orders/user/:user_id', orderController.getUserOrders);
 
 //Ruta para crear una orden
-orderRouter.post('/orders', orderController.addOrder);
+router.post('/orders/user/:user_id', orderController.addOrder);
 
 //Ruta para actualizar una orden
-orderRouter.put('/orders/:id', orderController.updateOrder);
+router.put('/orders/:id/user/:user_id', orderController.updateOrder);
 
 //Ruta para eliminar una orden
-orderRouter.delete('/orders/:id', orderController.deleteOrder);
+router.delete('/orders/:id/user/:user_id', orderController.deleteOrder);
 
-export default orderRouter;
+export default router;

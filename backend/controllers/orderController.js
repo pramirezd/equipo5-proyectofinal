@@ -3,11 +3,11 @@ import { orderModel } from "../models/orderModel.js";
 // Obtener las ordenes de un usuario por ID
 
 const getUserOrders = async (req, res) => {
-  const { id } = req.params;
+  const { user_id } = req.params;
   try {
-    const orders = await orderModel.getUserOrders(id);
+    const orders = await orderModel.getUserOrders(user_id);
     return res.status(200).json({
-      message: "Ordenes del usuario",
+      message: `Ordenes del usuario ${user_id}`,
       orders,
     });
   } catch (error) {
@@ -21,10 +21,10 @@ const getUserOrders = async (req, res) => {
 // Crear una orden
 
 const addOrder = async (req, res) => {
-  const { id } = req.params;
+  const { user_id } = req.params;
   const { total, order_state } = req.body;
   try {
-    const order = await orderModel.addOrder(id, total, order_state);
+    const order = await orderModel.addOrder(user_id, total, order_state);
     return res.status(200).json({
       message: "Orden creada correctamente",
       order,
@@ -37,13 +37,13 @@ const addOrder = async (req, res) => {
   }
 };
 
-// Actualizar una orden existente
+// Actualizar una orden existente por id de usuario
 
 const updateOrder = async (req, res) => {
-  const { id } = req.params;
-  const { order_state } = req.body;
+  const { id, user_id } = req.params;
+  const { total, order_state } = req.body;
   try {
-    const order = await orderModel.updateOrder(id, order_state);
+    const order = await orderModel.updateOrder(id, user_id, total, order_state);
     return res.status(200).json({
       message: "Orden actualizada correctamente",
       order,
@@ -54,14 +54,14 @@ const updateOrder = async (req, res) => {
       message: "Error interno del servidor",
     });
   }
-};
+}
 
-// Eliminar una orden por ID
+// Eliminar orden por id de usuario
 
 const deleteOrder = async (req, res) => {
-  const { id } = req.params;
+  const { id, user_id } = req.params;
   try {
-    await orderModel.deleteOrder(id);
+    await orderModel.deleteOrder(id, user_id);
     return res.status(200).json({
       message: "Orden eliminada correctamente",
     });
@@ -71,7 +71,7 @@ const deleteOrder = async (req, res) => {
       message: "Error interno del servidor",
     });
   }
-};
+}
 
 export const orderController = {
   getUserOrders,

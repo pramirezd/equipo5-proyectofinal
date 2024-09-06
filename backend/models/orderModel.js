@@ -2,14 +2,14 @@ import pool from "../config/db.js";
 
 //Obtener las ordenes por usuario
 
-const getUserOrders = async (id) => {
+const getUserOrders = async (user_id) => {
   try {
     const query = `
-            SELECT o.id, o.created_at, o.total, o.order_state
+            SELECT o.id, o.user_id, o.created_at, o.total, o.order_state
             FROM orders o
             WHERE o.user_id =$1
         `;
-    const response = await pool.query(query, [id]);
+    const response = await pool.query(query, [user_id]);
     return response.rows;
   } catch (error) {
     console.error(error);
@@ -17,7 +17,7 @@ const getUserOrders = async (id) => {
   }
 }
 
-//Agregar una orden
+// Crear una orden nueva por usuario
 
 const addOrder = async (user_id, total, order_state) => {
   try {
@@ -34,17 +34,17 @@ const addOrder = async (user_id, total, order_state) => {
   }
 }
 
-// Actualizar una orden existente
+// Actualizar orden existente por id de usuario
 
-const updateOrder = async (id, total, order_state) => {
+const updateOrder = async (id, user_id, total, order_state) => {
   try {
     const query = `
         UPDATE orders
-        SET total = $2, order_state = $3
-        WHERE id = $1
+        SET total = $3, order_state = $4
+        WHERE id = $1 AND user_id = $2
         RETURNING *;
       `;
-    const response = await pool.query(query, [id , total, order_state]);
+    const response = await pool.query(query, [id, user_id, total, order_state]);
     return response.rows[0];
   } catch (error) {
     console.error("Error en la operación UPDATEORDER:", error);
@@ -52,16 +52,16 @@ const updateOrder = async (id, total, order_state) => {
   }
 }
 
-// Eliminar una orden por ID
+// Eliminar orden por id de usuario
 
-const deleteOrder = async (id) => {
+const deleteOrder = async (id, user_id) => {
   try {
     const query = `
         DELETE FROM orders
-        WHERE id = $1
+        WHERE id = $1 AND user_id = $2
         RETURNING *;
       `;
-    const response = await pool.query(query, [id]);
+    const response = await pool.query(query, [id, user_id]);
     return response.rows[0];
   } catch (error) {
     console.error("Error en la operación DELETEORDER:", error);
@@ -69,6 +69,7 @@ const deleteOrder = async (id) => {
   }
 }
 
+//Exportar modelo
 export const orderModel = {
     getUserOrders,
     addOrder,
