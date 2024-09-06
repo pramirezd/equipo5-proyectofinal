@@ -4,7 +4,7 @@ import { Router } from 'express'
 const orderRouter = Router();
 
 //Ruta para obtener las ordenes de un usuario
-orderRouter.get('/orders', orderController.getUserOrders);
+orderRouter.get('/orders/:id', orderController.getUserOrders);
 
 //Ruta para crear una orden
 orderRouter.post('/orders', orderController.addOrder);

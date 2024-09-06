@@ -36,15 +36,15 @@ const addOrder = async (user_id, total, order_state) => {
 
 // Actualizar una orden existente
 
-const updateOrder = async (id, order_state) => {
+const updateOrder = async (id, total, order_state) => {
   try {
     const query = `
         UPDATE orders
-        SET order_state = $2
+        SET total = $2, order_state = $3
         WHERE id = $1
         RETURNING *;
       `;
-    const response = await pool.query(query, [id, order_state]);
+    const response = await pool.query(query, [id , total, order_state]);
     return response.rows[0];
   } catch (error) {
     console.error("Error en la operación UPDATEORDER:", error);

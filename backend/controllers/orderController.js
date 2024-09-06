@@ -3,7 +3,7 @@ import { orderModel } from "../models/orderModel.js";
 // Obtener las ordenes de un usuario por ID
 
 const getUserOrders = async (req, res) => {
-  const { id } = req.user;
+  const { id } = req.params;
   try {
     const orders = await orderModel.getUserOrders(id);
     return res.status(200).json({
@@ -21,7 +21,7 @@ const getUserOrders = async (req, res) => {
 // Crear una orden
 
 const addOrder = async (req, res) => {
-  const { id } = req.user;
+  const { id } = req.params;
   const { total, order_state } = req.body;
   try {
     const order = await orderModel.addOrder(id, total, order_state);
