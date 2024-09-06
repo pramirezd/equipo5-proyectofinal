@@ -5,9 +5,9 @@ import pool from "../config/db.js";
 const getUserOrders = async (user_id) => {
   try {
     const query = `
-            SELECT o.id, o.user_id, o.created_at, o.total, o.order_state
-            FROM orders o
-            WHERE o.user_id =$1
+            SELECT *
+            FROM orders
+            WHERE user_id =$1
         `;
     const response = await pool.query(query, [user_id]);
     return response.rows;

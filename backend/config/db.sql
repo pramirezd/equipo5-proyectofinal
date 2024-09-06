@@ -25,13 +25,13 @@ CREATE TABLE products (
     stock INTEGER,
     img_url TEXT,
     brand TEXT,
-    category_id BIGINT REFERENCES categories(id)
+    category_id BIGINT REFERENCES categories(id) ON DELETE CASCADE
 );
 
 -- Crear tabla de carritos
 CREATE TABLE carts (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id BIGINT REFERENCES users(id),
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -39,15 +39,15 @@ CREATE TABLE carts (
 -- Crear tabla de productos en el carrito
 CREATE TABLE cart_product (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    cart_id BIGINT REFERENCES carts(id),
-    product_id BIGINT REFERENCES products(id),
+    cart_id BIGINT REFERENCES carts(id) ON DELETE CASCADE,
+    product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
     quantity INTEGER NOT NULL
 );
 
 -- Crear tabla de órdenes
 CREATE TABLE orders (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id BIGINT REFERENCES users(id),
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     total NUMERIC NOT NULL,
     order_state TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -56,16 +56,16 @@ CREATE TABLE orders (
 -- Crear tabla de relación entre órdenes y productos
 CREATE TABLE order_product (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    order_id BIGINT REFERENCES orders(id),
-    product_id BIGINT REFERENCES products(id),
+    order_id BIGINT REFERENCES orders(id) ON DELETE CASCADE,
+    product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
     quantity INTEGER NOT NULL
 );
 
 -- Crear tabla de favoritos
 CREATE TABLE favorites (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id BIGINT REFERENCES users(id),
-    product_id BIGINT REFERENCES products(id)
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+    product_id BIGINT REFERENCES products(id) ON DELETE CASCADE
 );
 
 -- Insertar datos en la tabla de usuarios
