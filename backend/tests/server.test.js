@@ -93,3 +93,60 @@ describe('POST /easycommerce/cart', () => {
   });
 });
 });
+
+describe('/easycommerce/users', () => {
+describe('POST /easycommerce/users', () => {
+  it('should return 200 OK', (done) => {
+    request(app)
+      .post('/easycommerce/users/register')
+      .send({
+        name: 'test',
+        email: 'test@mail.com',
+        password: '123456',
+      })
+      .expect(200, done);
+  });
+});
+
+describe('POST /easycommerce/users', () => {
+  it('should return 200 OK', (done) => {
+    request(app)
+      .post('/easycommerce/users/login')
+      .send({
+        email: 'test@mail.com',
+        password: '123456',
+      });
+  });
+});
+});
+
+describe('/easycommerce/categories', () => {
+describe('GET /easycommerce/categories', () => {
+  it('should return 200 OK', (done) => {
+    request(app)
+      .get('/easycommerce/categories/')
+      .expect(200, done);
+  });
+});
+
+describe('POST /easycommerce/categories', () => {
+  it('should return 200 OK', (done) => {
+    request(app)
+      .post('/easycommerce/categories/')
+      .send({
+        name: 'test',
+      })
+      .expect(200, done);
+  });
+});
+});
+
+describe('/easycommerce/products', () => {
+describe('GET /easycommerce/products', () => {
+  it('should return 200 OK', (done) => {
+    request(app)
+      .get('/easycommerce/products/')
+      .expect(200, done);
+  });
+});
+});
