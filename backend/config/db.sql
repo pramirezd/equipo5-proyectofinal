@@ -1,3 +1,15 @@
+\c postgres
+
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity
+WHERE datname = 'ecommerce'
+  AND pid <> pg_backend_pid();
+
+DROP DATABASE IF EXISTS ecommerce;
+CREATE DATABASE ecommerce;
+
+\c ecommerce;
+
 -- Crear tabla de usuarios
 CREATE TABLE users (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -6,7 +18,7 @@ CREATE TABLE users (
     address TEXT,
     phone TEXT,
     email TEXT UNIQUE NOT NULL,
-    password TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
     isadmin BOOLEAN DEFAULT FALSE
 );
 
@@ -29,11 +41,12 @@ CREATE TABLE products (
 );
 
 -- Crear tabla de carritos
-CREATE TABLE carts (
+CREATE TABLE IF NOT EXISTS carts (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_user_cart UNIQUE (user_id) -- Definición correcta de la restricción UNIQUE
 );
 
 -- Crear tabla de productos en el carrito
@@ -41,7 +54,8 @@ CREATE TABLE cart_product (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     cart_id BIGINT REFERENCES carts(id) ON DELETE CASCADE,
     product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
-    quantity INTEGER NOT NULL
+    quantity INTEGER NOT NULL,
+    CONSTRAINT unique_cart_product UNIQUE (cart_id, product_id) -- Agregar restricción UNIQUE
 );
 
 -- Crear tabla de órdenes
@@ -65,21 +79,23 @@ CREATE TABLE order_product (
 CREATE TABLE favorites (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
-    product_id BIGINT REFERENCES products(id) ON DELETE CASCADE
+    product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
+    CONSTRAINT unique_favorite UNIQUE (user_id, product_id)
 );
 
--- Insertar datos en la tabla de usuarios
+-- Insertar datos en la tabla de usuarios con contraseñas cifradas
 INSERT INTO users (name, lastname, address, phone, email, password, isadmin) VALUES
-('Juan', 'Pérez', 'Av. Libertador 123, Santiago', '987654321', 'juan.perez1@example.com', 'pass123', FALSE),
-('María', 'González', 'Calle Falsa 456, Viña del Mar', '912345678', 'maria.gonzalez1@example.com', 'securepass', FALSE),
-('Carlos', 'Sánchez', 'Pasaje Los Cedros 789, Concepción', '934567890', 'carlos.sanchez1@example.com', 'mypassword', TRUE),
-('Laura', 'Rodríguez', 'Av. Las Condes 111, Santiago', '956789012', 'laura.rodriguez1@example.com', 'adminpass', TRUE),
-('Pedro', 'Gutiérrez', 'Calle Mayor 321, Valparaíso', '987654322', 'pedro.gutierrez@example.com', 'password1', FALSE),
-('Ana', 'López', 'Av. Las Américas 654, Santiago', '912345679', 'ana.lopez@example.com', 'password2', FALSE),
-('Luis', 'Martínez', 'Calle Real 987, La Serena', '934567891', 'luis.martinez@example.com', 'password3', FALSE),
-('Elena', 'Hernández', 'Av. Providencia 333, Santiago', '956789013', 'elena.hernandez@example.com', 'password4', FALSE),
-('Diego', 'Ramírez', 'Pasaje del Sol 123, Antofagasta', '987654323', 'diego.ramirez@example.com', 'password5', FALSE),
-('Marta', 'Jiménez', 'Calle Central 456, Iquique', '912345680', 'marta.jimenez@example.com', 'password6', FALSE);
+('test', 'user', '123 Test St', '999999999', 'test@example.com', '$2b$10$Fxmpe2lbY7e6VRS5RsxmWO.fIni.yvFV7WeO68dYnxM9Sd8zk1j6K', TRUE),
+('Juan', 'Pérez', 'Av. Libertador 123, Santiago', '987654321', 'juan.perez1@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
+('María', 'González', 'Calle Falsa 456, Viña del Mar', '912345678', 'maria.gonzalez1@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
+('Carlos', 'Sánchez', 'Pasaje Los Cedros 789, Concepción', '934567890', 'carlos.sanchez1@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', TRUE),
+('Laura', 'Rodríguez', 'Av. Las Condes 111, Santiago', '956789012', 'laura.rodriguez1@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', TRUE),
+('Pedro', 'Gutiérrez', 'Calle Mayor 321, Valparaíso', '987654322', 'pedro.gutierrez@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
+('Ana', 'López', 'Av. Las Américas 654, Santiago', '912345679', 'ana.lopez@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
+('Luis', 'Martínez', 'Calle Real 987, La Serena', '934567891', 'luis.martinez@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
+('Elena', 'Hernández', 'Av. Providencia 333, Santiago', '956789013', 'elena.hernandez@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
+('Diego', 'Ramírez', 'Pasaje del Sol 123, Antofagasta', '987654323', 'diego.ramirez@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
+('Marta', 'Jiménez', 'Calle Central 456, Iquique', '912345680', 'marta.jimenez@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE);
 
 -- Insertar datos en la tabla de categorías
 INSERT INTO categories (name) VALUES

@@ -102,6 +102,7 @@ const login = async (req, res) => {
     return res.status(200).json({
       message: "Sesión iniciada con éxito",
       user: payload,
+      token: token,
     });
   } catch (error) {
     console.error(error);
