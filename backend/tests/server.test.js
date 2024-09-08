@@ -1,19 +1,31 @@
 import request from 'supertest';
 import app from '../index';
+import dotenv from 'dotenv';
+dotenv.config();
 
-describe('/easycommerce/user-orders', () => {
-describe('GET /easycommerce/user-orders', () => {
+const TOKEN = process.env.BEARER_TOKEN;
+
+describe('/easycommerce/orders', () => {
+describe('GET /easycommerce/orders', () => {
   it('should return 200 OK', (done) => {
     request(app)
-      .get('/easycommerce/user-orders/orders/user/1')
+      .get('/easycommerce/orders/user/1')
       .expect(200, done);
   });
 });
 
-describe('POST /easycommerce/user-orders', () => {
+describe('GET /easycommerce/orders', () => {
   it('should return 200 OK', (done) => {
     request(app)
-      .post('/easycommerce/user-orders/orders/user/1')
+      .get('/easycommerce/orders/allOrders')
+      .expect(200, done);
+  });
+});
+
+describe('POST /easycommerce/orders', () => {
+  it('should return 200 OK', (done) => {
+    request(app)
+      .post('/easycommerce/orders/user/1')
       .send({
         total: 100,
         order_state: 'pending',
@@ -22,10 +34,10 @@ describe('POST /easycommerce/user-orders', () => {
   });
 });
 
-describe('PUT /easycommerce/user-orders', () => {
+describe('PUT /easycommerce/orders', () => {
   it('should return 200 OK', (done) => {
     request(app)
-      .put('/easycommerce/user-orders/orders/1/user/1')
+      .put('/easycommerce/orders/1/user/1')
       .send({
         total: 200,
         order_state: 'completed',
@@ -34,42 +46,45 @@ describe('PUT /easycommerce/user-orders', () => {
   });
 });
 
-describe('DELETE /easycommerce/user-orders', () => {
+describe('DELETE /easycommerce/orders', () => {
   it('should return 200 OK', (done) => {
     request(app)
-      .delete('/easycommerce/user-orders/orders/1/user/1')
+      .delete('/easycommerce/orders/1/user/1')
       .expect(200, done);
   });
 });
 });
 
 describe('/easycommerce/favorites', () => {
-describe('GET /easycommerce/favorites', () => {
-  it('should return 200 OK', (done) => {
-    request(app)
-      .get('/easycommerce/favorites/user/1')
-      .expect(200, done);
+  describe('GET /easycommerce/favorites', () => {
+    it('should return 200 OK', (done) => {
+      request(app)
+        .get('/easycommerce/favorites/user/1')
+        .set('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiSnVhbiIsImxhc3RuYW1lIjoiUMOpcmV6IiwiZW1haWwiOiJqdWFuLnBlcmV6MUBleGFtcGxlLmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE3MjU3NTQ0ODksImV4cCI6MTcyNjM1OTI4OX0.RWLV7BVPr_Rn69nfUcstENOrSDlbA2__QWUEK3kNlA0`)
+        .expect(200, done);
+    });
   });
-});
 
-describe('POST /easycommerce/favorites', () => {
-  it('should return 200 OK', (done) => {
-    request(app)
-      .post('/easycommerce/favorites/user/1')
-      .send({
-        product_id: 1,
-      })
-      .expect(200, done);
+  describe('POST /easycommerce/favorites', () => {
+    it('should return 200 OK', (done) => {
+      request(app)
+        .post('/easycommerce/favorites/user/1')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .send({
+          product_id: 1,
+        })
+        .expect(200, done);
+    });
   });
-});
 
-describe('DELETE /easycommerce/favorites', () => {
-  it('should return 200 OK', (done) => {
-    request(app)
-      .delete('/easycommerce/favorites/user/1/product/1')
-      .expect(200, done);
+  describe('DELETE /easycommerce/favorites', () => {
+    it('should return 200 OK', (done) => {
+      request(app)
+        .delete('/easycommerce/favorites/user/1/product/1')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .expect(200, done);
+    });
   });
-});
 });
 
 describe('/easycommerce/cart', () => {

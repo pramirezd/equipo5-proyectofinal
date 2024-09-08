@@ -18,6 +18,23 @@ const getUserOrders = async (req, res) => {
   }
 };
 
+// Obtener todas las ordenes
+
+const getAllOrders = async (req, res) => {
+  try {
+    const orders = await orderModel.getAllOrders();
+    return res.status(200).json({
+      message: "Todas las ordenes",
+      orders,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error interno del servidor",
+    });
+  }
+}
+
 // Crear una orden
 
 const addOrder = async (req, res) => {
@@ -75,6 +92,7 @@ const deleteOrder = async (req, res) => {
 
 export const orderController = {
   getUserOrders,
+  getAllOrders,
   addOrder,
   updateOrder,
   deleteOrder,

@@ -17,6 +17,22 @@ const getUserOrders = async (user_id) => {
   }
 }
 
+//Obtener todas las ordenes
+
+const getAllOrders = async () => {
+  try {
+    const query = `
+            SELECT *
+            FROM orders
+        `;
+    const response = await pool.query(query);
+    return response.rows;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Hubo un error con la operacion GETALLORDERS");
+  }
+}
+
 // Crear una orden nueva por usuario
 
 const addOrder = async (user_id, total, order_state) => {
@@ -72,6 +88,7 @@ const deleteOrder = async (id, user_id) => {
 //Exportar modelo
 export const orderModel = {
     getUserOrders,
+    getAllOrders,
     addOrder,
     updateOrder,
     deleteOrder

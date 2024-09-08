@@ -4,15 +4,18 @@ import express from 'express'
 const router = express.Router();
 
 //Ruta para obtener las ordenes de un usuario
-router.get('/orders/user/:user_id', orderController.getUserOrders);
+router.get('/user/:user_id', orderController.getUserOrders);
+
+//Ruta para obtener todas las ordenes
+router.get('/allOrders', orderController.getAllOrders);
 
 //Ruta para crear una orden
-router.post('/orders/user/:user_id', orderController.addOrder);
+router.post('/user/:user_id', orderController.addOrder);
 
 //Ruta para actualizar una orden
-router.put('/orders/:id/user/:user_id', orderController.updateOrder);
+router.put('/:id/user/:user_id', orderController.updateOrder);
 
 //Ruta para eliminar una orden
-router.delete('/orders/:id/user/:user_id', orderController.deleteOrder);
+router.delete('/:id/user/:user_id', orderController.deleteOrder);
 
 export default router;

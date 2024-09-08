@@ -48,7 +48,7 @@ app.use("/easycommerce/cart", cartRoutes);
 //Rutas de los productos favoritos
 app.use("/easycommerce/favorites", favoritesRoutes);
 //Rutas de las ordenes
-app.use("/easycommerce/user-orders", orderRoutes);
+app.use("/easycommerce/orders", orderRoutes);
 
 //Iniciar servidor
 app.listen(port, () => {
