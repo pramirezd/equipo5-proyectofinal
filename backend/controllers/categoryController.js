@@ -11,12 +11,25 @@ const categories = async (req, res) => {
     });
   }
 };
+
+const categoryById = async (req, res) => {
+  const { category_id } = req.params;
+  try {
+    const category = await categoryModel.getCategorieById(category_id);
+    return res.status(200).json(category);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error interno del servidor",
+    });
+  }
+};
 const createCategory = async (req, res) => {
   const { name } = req.body;
   try {
     const create = await categoryModel.createCategory(name);
     return res.status(200).json({
-      message: "Categoria creada",
+      create,
     });
   } catch (error) {
     console.error(error);
@@ -26,7 +39,25 @@ const createCategory = async (req, res) => {
   }
 };
 
+const removeCategory = async (req, res) => {
+  const { category_id } = req.params;
+  console.log("parametros: ", req.params);
+  try {
+    const remove = await categoryModel.removeCategory(category_id);
+    return res.status(200).json({
+      remove,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Error interno del servidor",
+    });
+  }
+};
+
 export const categoryController = {
-    categories,
-    createCategory
+  categories,
+  categoryById,
+  createCategory,
+  removeCategory,
 };
