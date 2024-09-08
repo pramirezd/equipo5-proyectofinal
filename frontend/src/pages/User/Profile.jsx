@@ -8,11 +8,6 @@ import { FaLocationDot } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import AdminNavBar from "../Admin/AdminNavBar";
-import UserNavBar from "./UserNavBar";
-//Contexto
-import { useAuth } from "../../context/userContext";
-import { useEffect } from "react";
-
 const Profile = () => {
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
@@ -20,28 +15,14 @@ const Profile = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {user, isAdmin, autenticado} = useAuth()
-  
-  useEffect(() => {
-    if (user) {
-      setName(user.name || "");
-      setLastname(user.lastname || "");
-      setAdress(user.address || "");
-      setPhone(user.phone || "");
-      setEmail(user.email || "");
-    }
-  }, [user]);
-
-
-  const NavigationMenu = isAdmin ? AdminNavBar : UserNavBar;
   return (
     <div>
       <div className="flex flex-col justify-center items-center mt-16 ">
-        <div className="w-full flex justify-end mr-[430px]">
-          <NavigationMenu />
+        <div className="w-full flex justify-end mr-[220px]">
+          <AdminNavBar/>
         </div>
         <h1 className="text-3xl font-semibold">
-          Update User Info
+          Actualizar Informacion de Usuario
         </h1>
         {/* Formulario para modificar el perfil */}
         <form className="flex flex-col shadow-lg p-9 rounded-lg mt-6">

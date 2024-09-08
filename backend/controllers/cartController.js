@@ -2,19 +2,14 @@ import { cartModel } from "../models/cartModel.js";
 
 //Obtener el carro por usuario
 const getCart = async (req, res) => {
+  //Obtener la informacion del user
+  const { user_id } = req.params;
   try {
-    const { id } = req.user;
-    if (!id) {
-      return res.status(400).json({ message: "ID de usuario es requerido" });
-    }
-    const cart = await cartModel.getUserCart(id);
-    if (cart) {
-      return res.status(200).json(cart);
-    } else {
-      return res.status(404).json({
-        message: "Carrito no encontrado",
-      });
-    }
+    const cart = await cartModel.getUserCart(user_id);
+    return res.status(200).json({
+      message: "Carrito del usuario",
+      cart,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -24,71 +19,38 @@ const getCart = async (req, res) => {
 };
 //Agregar productos al carrito
 const addToCart = async (req, res) => {
+  const { user_id } = req.params;
+  const { product_id, quantity } = req.body;
   try {
-    const { id } = req.user;
-    const { productId, quantity } = req.body;
-
-    if (!productId || !quantity) {
-      return res.status(400).json({
-        message: "Datos incompletos, se requiere productId y quantity",
-      });
-    }
-    const cart = await cartModel.getUserCart(id);
-    if (!cart.cart) {
-      return res.status(404).json({ message: "Carrito no encontrado" });
-    }
-    const cartId = cart.cart.id;
-    const addedProduct = await cartModel.addProductToCart(
-      cartId,
-      productId,
-      quantity
-    );
-    if (addedProduct) {
-      return res.status(200).json({
-        message: "Producto agregado al carrito",
-        product: addedProduct,
-      });
-    } else {
-      return res
-        .status(500)
-        .json({ message: "No se pudo agregar el producto al carrito" });
-    }
+    const cart = await cartModel.addProduct(user_id, product_id, quantity);
+    return res.status(200).json({
+      message: "Producto Añadido Correctamente",
+      cart,
+    });
   } catch (error) {
-    console.error("Error al agregar producto al carrito: ", error);
-    return res
-      .status(500)
-      .json({ message: "Error al agregar producto al carrito" });
+    console.error(error);
+    return res.status(500).json({
+      message: error.message,
+    });
   }
 };
-//Controlador para eliminar el producto del carrito
-const removeFromCart = async (req, res) => {
+const removeProduct = async (req, res) => {
+  const { user_id, product_id } = req.params;
   try {
-    const { cartProductId } = req.params;
-
-    if (!cartProductId) {
-      return res
-        .status(400)
-        .json({ message: "ID del producto en el carrito es requerido" });
-    }
-    const removedProduct = await cartModel.removeProductFromCart(cartProductId);
-    if (removedProduct) {
-      return res.status(200).json({
-        message: "Producto eliminado del carrito",
-        product: removedProduct,
-      });
-    } else {
-      return res
-        .status(404)
-        .json({ message: "Producto no encontrado en el carrito" });
-    }
+    const result = await cartModel.removeProduct(user_id, product_id);
+    return res.status(200).json({
+      message: result.message, // Muestra el mensaje adecuado según si el producto fue eliminado o no
+    });
   } catch (error) {
-    console.error("Error al eliminar producto del carrito:", error);
-    return res.status(500).json({ message: "Error interno del servidor" });
+    console.error(error);
+    return res.status(500).json({
+      message: "Error interno del servidor",
+    });
   }
 };
 
 export const cartController = {
   getCart,
   addToCart,
-  removeFromCart,
+  removeProduct,
 };

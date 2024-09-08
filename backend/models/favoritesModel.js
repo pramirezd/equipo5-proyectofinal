@@ -1,28 +1,13 @@
 import pool from "../config/db.js";
 
-const checkIfFavoriteExists = async (user_id, product_id) => {
-  try {
-    const query =
-      "SELECT 1 FROM favorites WHERE user_id = $1 AND product_id = $2";
-    const values = [user_id, product_id];
-    const response = await pool.query(query, values);
-    return response.rowCount > 0;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error al verificar si el favorito existe");
-  }
-};
-
 const addFavoriteUserProduct = async (user_id, product_id) => {
   try {
-    const favoriteExists = await checkIfFavoriteExists(user_id, product_id);
-    if (favoriteExists) {
-      return {
-        message: "Este producto ya está en la lista de favoritos del usuario",
-      };
-    }
-    const query =
-      "INSERT INTO favorites(user_id, product_id) VALUES($1, $2) RETURNING *";
+    const query = `
+      INSERT INTO favorites(user_id, product_id)
+      VALUES($1, $2)
+      ON CONFLICT (user_id, product_id) DO NOTHING
+      RETURNING *;
+      `;
     const values = [user_id, product_id];
     const response = await pool.query(query, values);
     return response.rows;

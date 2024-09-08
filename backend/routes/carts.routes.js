@@ -3,15 +3,18 @@ import express from "express";
 import { AuthMiddleware } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
-//Ruta para obtener el carrito con productos
-router.get("/", AuthMiddleware.authToken, cartController.getCart);
+//Ruta para obtener los carritos por usuario
+router.get("/user/:user_id", AuthMiddleware.authToken, cartController.getCart);
 //Ruta para agregar un producto al carrito
-router.post("/add", AuthMiddleware.authToken, cartController.addToCart);
-//Ruta para eliminar el producto del carrito
-router.delete(
-  "/remove/:cartProductId",
+router.post(
+  "/user/:user_id",
   AuthMiddleware.authToken,
-  cartController.removeFromCart
+  cartController.addToCart
+);
+router.delete(
+  "/user/:user_id/product/:product_id",
+  AuthMiddleware.authToken,
+  cartController.removeProduct
 );
 
 export default router;

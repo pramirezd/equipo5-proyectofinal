@@ -11,9 +11,10 @@ const getCategories = async () => {
 };
 const createCategory = async (name) => {
   try {
-    const query = await pool.query("INSERT INTO categories(name) VALUES($1)", [
-      name,
-    ]);
+    const query = await pool.query(
+      "INSERT INTO categories(name) VALUES($1) RETURNING *",
+      [name]
+    );
     return query.rows[0];
   } catch (error) {
     console.error(error);
@@ -31,8 +32,21 @@ const getCategorieById = async (id) => {
     throw new Error("HUBO UN ERROR CON LA OPERACION GETCATEGORYBYID");
   }
 };
+const removeCategory = async (category_id) => {
+  try {
+    const query = await pool.query(
+      "DELETE FROM categories WHERE id = $1 RETURNING *",
+      [category_id]
+    );
+    return query.rows[0];
+  } catch (error) {
+    console.error("Error en removeCategory:", error);
+    throw new Error(`HUBO UN ERROR CON LA OPERACION DELETECATEGORY ${error}`);
+  }
+};
 export const categoryModel = {
   getCategories,
   createCategory,
   getCategorieById,
+  removeCategory,
 };

@@ -1,47 +1,11 @@
 import React, { useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { FaRegEdit } from "react-icons/fa";
-import axios from "axios";
-import { useAuth } from "../../context/userContext";
-
-import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ producto }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const navigate = useNavigate();
-  const { autenticado, isAdmin, addFavorite } = useAuth();
-
-  const handleLikeClick = async () => {
-    try {
-      if (isLiked) {
-        await removeFavorite(producto.id);
-        setIsLiked(false);
-        toast.success("Producto eliminado de favoritos");
-      } else {
-        await addFavorite(producto.id);
-        setIsLiked(true);
-        toast.success("Producto agregado a favoritos");
-      }
-    } catch (error) {
-      toast.error("Error al actualizar favoritos");
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      const eliminar = await axios.delete(
-        `http://localhost:5000/easycommerce/products/product/${producto.id}`
-      );
-      toast.success("Producto eliminado correctamente");
-    } catch (error) {
-      console.error("Error al eliminar el producto", error);
-      toast.error("Error al eliminar el producto");
-    }
-  };
-  const handleDetails = () => {
-    navigate(`/product/${producto.id}`);
+  const handleLikeClick = () => {
+    setIsLiked(!isLiked);
   };
 
   return (
@@ -61,15 +25,11 @@ const ProductCard = ({ producto }) => {
       </div>
 
       <div className="flex justify-center w-full">
-        <img
-          src={`http://localhost:5000/${producto.img_url}`}
-          alt={producto.name}
-          className="w-32 h-32"
-        />
+        <img src={producto.img} alt={producto.nombre} className="w-32 h-32" />
       </div>
       <div className="flex flex-col gap-4 items-start w-full">
         <div>
-          <p>{producto.name}</p>
+          <p>{producto.nombre}</p>
           <p className="font-thin">
             <span className="font-bold">
               {"\u00A9"}
@@ -80,31 +40,15 @@ const ProductCard = ({ producto }) => {
             <p className="text-2xl text-green-600 font-bold">
               ${producto.price}
             </p>
-            <p className="text-lg font-thin">
-              Category:{" "}
-              <span className="font-semibold">{producto.category_name}</span>
+            <p className="font-thin">
+              Category: {" "}
+              <span className="font-semibold">{producto.category}</span>
             </p>
           </div>
         </div>
-        <div className="flex justify-between w-full">
-          <button
-            onClick={handleDetails}
-            className="font-semibold hover:underline"
-          >
-            See Details
-          </button>
-          {/* Si el usuario es admin se pueden eliminar los productos y actualizarlos */}
-          {isAdmin && (
-            <div className="flex justify-center items-center gap-5">
-              <button onClick={handleDelete}>
-                <FaRegTrashCan className="text-red-600 text-xl" />
-              </button>
-              <button>
-                <FaRegEdit className="text-green-500 text-xl" />
-              </button>
-            </div>
-          )}
-        </div>
+        <Link to={`/product/${producto.id}`}>
+          <button className="font-semibold hover:underline">See Details</button>
+        </Link>
       </div>
     </div>
   );
