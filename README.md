@@ -18,7 +18,7 @@ npm install
    2.1 Crear base de datos 'ecommerce' con el siguiente comando:
 
    ```
-   psql -h localhost -U postgres -d ecommerce -f ./backend/config/db.sql
+   psql -h localhost -U postgres -d ecommerce -f ./config/db.sql
    ```
 
 3. Una vez instaladas las dependencias, creada la base de datos con sus respectivas tablas y configurado el archivo `.env` iniciar el servidor con el comando:
