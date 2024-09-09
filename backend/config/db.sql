@@ -2,11 +2,11 @@
 
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
-WHERE datname = 'ecommerce'
+WHERE datname = 'ecommerce_g5'
   AND pid <> pg_backend_pid();
 
 DROP DATABASE IF EXISTS ecommerce;
-CREATE DATABASE ecommerce;
+CREATE DATABASE ecommerce_g5;
 
 \c ecommerce;
 
