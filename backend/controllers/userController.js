@@ -19,6 +19,7 @@ const users = async (req, res) => {
 
 const register = async (req, res) => {
   const { name, lastname, address, phone, email, password, isadmin } = req.body;
+  console.log(res.body);
   try {
     // Verificar si el usuario ya existe
     const userExist = await userModel.findUser(email);
@@ -99,6 +100,7 @@ const login = async (req, res) => {
       sameSite: "lax",
     };
     res.cookie("token_access", token, cookieOptions);
+    console.log(token);
     return res.status(200).json({
       message: "Sesión iniciada con éxito",
       user: payload,

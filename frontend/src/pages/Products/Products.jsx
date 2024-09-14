@@ -1,10 +1,27 @@
 // src/components/Products.js
 import React from "react";
 import ProductCard from "./ProductCard";
-import productos from "../../data.js";
+import { useEffect, useState } from "react";
+
+// import productos from "../../data.js";
+
+const urlApi = `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/products/`;
 
 const Products = ({ limite }) => {
-  const productosAMostrar = limite ? productos.slice(0, limite) : productos;
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, [products]);
+
+  const getData = async () => {
+    const response = await fetch(urlApi);
+    const data = await response.json();
+
+    setProducts(data);
+  };
+
+  const productosAMostrar = limite ? products.slice(0, limite) : products;
   return (
     <div>
       <div className="flex flex-wrap justify-center">

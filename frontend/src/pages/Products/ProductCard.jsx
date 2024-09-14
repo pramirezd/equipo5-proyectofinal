@@ -25,7 +25,11 @@ const ProductCard = ({ producto }) => {
       </div>
 
       <div className="flex justify-center w-full">
-        <img src={producto.img} alt={producto.nombre} className="w-32 h-32" />
+        <img
+          src={producto.img_url}
+          alt={producto.nombre}
+          className="w-32 h-32"
+        />
       </div>
       <div className="flex flex-col gap-4 items-start w-full">
         <div>
@@ -41,7 +45,7 @@ const ProductCard = ({ producto }) => {
               ${producto.price}
             </p>
             <p className="font-thin">
-              Category: {" "}
+              Category:{" "}
               <span className="font-semibold">{producto.category}</span>
             </p>
           </div>

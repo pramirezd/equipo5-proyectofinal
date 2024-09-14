@@ -4,7 +4,13 @@ import pool from "../config/db.js";
 const getProducts = async () => {
   try {
     const query = `
-      SELECT p.*, c.name AS category_name 
+      SELECT 	p.id,
+          p.name,
+          p.description,
+          p.price,
+          p.stock,
+          'http://localhost:${process.env.PORT}/easycommerce/products/img/' || p.img_url as img_url,
+          c.name AS category_name 
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
     `;

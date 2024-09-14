@@ -13,13 +13,13 @@ export const UserProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/easycommerce/users/myProfile",
+          "http://localhost:3000/easycommerce/users/myProfile",
           { withCredentials: true }
         );
-        console.log("User data:", response.data); 
+        console.log("User data:", response.data);
         setUser(response.data);
         setAutenticado(true);
-        setIsAdmin(response.data.isadmin); 
+        setIsAdmin(response.data.isadmin);
       } catch (error) {
         console.error("Error fetching user profile:", error);
         setUser(null);
@@ -29,10 +29,11 @@ export const UserProvider = ({ children }) => {
     };
     checkAuth();
   }, [autenticado]);
+
   const login = async (email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/easycommerce/users/login",
+        "http://localhost:3000/easycommerce/users/login",
         { email, password },
         { withCredentials: true }
       );
@@ -49,7 +50,7 @@ export const UserProvider = ({ children }) => {
   const register = async (name, lastname, address, phone, email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/easycommerce/users/register",
+        "http://localhost:3000/easycommerce/users/register",
         { name, lastname, address, phone, email, password },
         { withCredentials: true }
       );
@@ -65,7 +66,7 @@ export const UserProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/easycommerce/users/logout",
+        "http://localhost:3000/easycommerce/users/logout",
         {},
         { withCredentials: true }
       );

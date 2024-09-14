@@ -1,6 +1,15 @@
+\c postgres
+
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity
+WHERE datname = 'ecommerce_g5'
+  AND pid <> pg_backend_pid();
+
+DROP DATABASE IF EXISTS ecommerce_g5;
+
 CREATE DATABASE ecommerce_g5;
 
-\c ecommerce;
+\c ecommerce_g5;
 
 -- Crear tabla de usuarios
 CREATE TABLE users (
