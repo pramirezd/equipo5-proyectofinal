@@ -31,7 +31,7 @@ const product = async (req, res) => {
 };
 const createProduct = async (req, res) => {
   const { name, description, price, stock, category_id, brand } = req.body;
-  const img_url = req.file ? req.file.path : null;
+  const img_url = req.file ? req.file.filename : null;
   try {
     const createProduct = await productModel.createProduct({
       name,

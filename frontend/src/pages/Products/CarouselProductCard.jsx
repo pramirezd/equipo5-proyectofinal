@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../../context/userContext"; // Si tienes un contexto de autenticación
 import { useCart } from "../../context/cartContext"; // Si tienes un contexto de carrito
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CarouselProductCard = ({
   id,
@@ -9,13 +10,19 @@ const CarouselProductCard = ({
   description,
   price,
   image,
-  seller,
+  brand,
 }) => {
   const { user } = useAuth(); // Obtener el usuario autenticado
   const { cart, setCart } = useCart(); // Obtener y actualizar el carrito
   const quantity = 1; // Definir la cantidad a agregar
 
+  const navigate = useNavigate();
+
   const handleAddToCart = async () => {
+    if (!user || !user.id) {
+      navigate("/login");
+      return;
+    }
     try {
       // Agregar producto al carrito en el backend
       await axios.post(
@@ -42,14 +49,10 @@ const CarouselProductCard = ({
           <p className="text-xl text-blue-500 font-semibold">Best Sellers</p>
           <div className="flex flex-col flex-grow w-[270px] p-2">
             <p className="text-lg font-semibold">{name}</p>
+            <span className="font-semibold">{brand}</span>
             <p className="text-md font-light">{description}</p>
           </div>
-          <div className="p-2">
-            <p className="font-light">Seller</p>
-            <p className="font-bold">
-              {"\u00A9"} {seller}
-            </p>
-          </div>
+          <div className="p-2"></div>
           <div className="flex items-center flex-grow p-2 gap-2">
             <p className="font-bold text-2xl text-green-600">${price}</p>
             <p className="font-thin">Credit or Debit</p>

@@ -7,6 +7,7 @@ const getProducts = async () => {
       SELECT 	p.id,
           p.name,
           p.description,
+          p.brand,
           p.price,
           p.stock,
           'http://localhost:${process.env.PORT}/easycommerce/products/img/' || p.img_url as img_url,
@@ -24,10 +25,21 @@ const getProducts = async () => {
 
 const getProductById = async (id) => {
   try {
-    const query = await pool.query("SELECT * FROM products WHERE id = $1", [
-      id,
-    ]);
-    return query.rows[0];
+    const query = `
+    SELECT 	p.id,
+        p.name,
+        p.description,
+        p.brand,
+        p.price,
+        p.stock,
+        'http://localhost:${process.env.PORT}/easycommerce/products/img/' || p.img_url as img_url,
+        c.name AS category_name 
+    FROM products p
+    LEFT JOIN categories c ON p.category_id = c.id
+    WHERE p.id = $1
+  `;
+    const result = await pool.query(query, [id]);
+    return result.rows[0];
   } catch (error) {
     console.error(error);
     throw new Error("Hubo un error con la operaicon GETPRODUCTBYID");

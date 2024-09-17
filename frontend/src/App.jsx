@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import Profile from "./pages/User/Profile";
 import AllFavorites from "./pages/Products/AllFavorites";
 import Cart from "./pages/Products/Cart";
+import MyOrders from "./pages/Orders/MyOrders";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AllProducts from "./pages/Products/AllProducts";
 import ProductDetail from "./pages/Products/ProductDetail";
@@ -39,6 +40,7 @@ function App() {
             {/* RUTAS DE ADMIN NAVBAR */}
             <Route path="/allUsers" element={<AllUsers />} />
             <Route path="/allOrders" element={<AllOrders />} />
+            <Route path="/myOrders" element={<MyOrders />} />
             <Route path="/createProduct" element={<CreateProduct />} />
             <Route path="/createCategory" element={<CreateCategory />} />
             {/* Detalle del producto */}

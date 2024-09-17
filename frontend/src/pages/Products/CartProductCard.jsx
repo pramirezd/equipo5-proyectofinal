@@ -126,12 +126,7 @@ const CartProductCard = ({ producto }) => {
           </button>
         </div>
         <p className="font-normal text-base leading-7 text-gray-500 mb-6">
-          Introducing our sleek round white portable speaker, the epitome of
-          style and sound! Elevate your auditory experience with this compact
-          yet powerful device that delivers crystal-clear audio wherever you go.{" "}
-          <a href="javascript:;" className="text-indigo-600">
-            More....
-          </a>
+          {producto.description}
         </p>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">

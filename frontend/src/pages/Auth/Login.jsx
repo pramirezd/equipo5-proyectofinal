@@ -3,12 +3,15 @@ import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import welcomeImage from "../../img/Welcome Image.png";
 import { useAuth } from "../../context/userContext.jsx";
+import { Link, useNavigate } from "react-router-dom"; // Importar useNavigate
 
 const Login = () => {
   const { login } = useAuth(); // Extrae la función de login del contexto
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevenir que el formulario se recargue
@@ -17,9 +20,9 @@ const Login = () => {
       // Llama a la función login del contexto con el email y el password
       await login(email, password);
       // Puedes redirigir al usuario a otra página después del login exitoso, por ejemplo:
-      // navigate("/dashboard");
+      navigate("/");
     } catch (err) {
-      setError("Invalid credentials. Please try again."); // Muestra el error si el login falla
+      setError(`${err}`); // Muestra el error si el login falla
     }
   };
 
@@ -81,7 +84,9 @@ const Login = () => {
           {/* Muestra el error si hay uno */}
           <p className="text-center text-gray-500 mt-3">
             You don't have an account?{" "}
-            <span className="text-black font-bold">Sign Up</span>
+            <Link to="/register">
+              <span className="text-black font-bold">Sign Up</span>
+            </Link>
           </p>
         </div>
       </form>

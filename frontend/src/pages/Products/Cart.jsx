@@ -1,14 +1,72 @@
 import React from "react";
+import axios from "axios";
 import { useCart } from "../../context/cartContext";
+import { useAuth } from "../../context/userContext";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import CartProductCard from "./CartProductCard";
 
 const Cart = () => {
   const { cart, setCart } = useCart();
+  const { user } = useAuth(); // Obtener el usuario autenticado
+  const navigate = useNavigate(); // Inicializar useNavigate
 
   const totalPriceInCart = cart.reduce(
     (total, product) => total + product.price * product.quantity,
     0
   );
+
+  // Función para manejar el checkout
+  const handleCheckout = async () => {
+    if (cart.length === 0) {
+      alert("No hay productos en el carrito");
+      return;
+    }
+
+    // Estructurar los datos para enviar al backend
+    const orderData = {
+      total: totalPriceInCart, // Total del carrito
+      order_state: "pending", // Estado inicial de la orden, puedes ajustarlo según tu lógica
+      products: cart.map((product) => ({
+        product_id: product.product_id, // Asegúrate de tener el ID del producto en tu carrito
+        quantity: product.quantity, // Cantidad de cada producto
+      })),
+    };
+
+    try {
+      // Enviar la orden al backend
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/orders/user/${
+          user.id
+        }`,
+        orderData,
+        {
+          withCredentials: true, // Para enviar cookies de autenticación si es necesario
+        }
+      );
+
+      // Mostrar mensaje de éxito y redirigir a "Mis Órdenes"
+      console.log("Orden creada:", response.data);
+      alert("Orden creada correctamente");
+
+      for (const product of cart) {
+        await axios.delete(
+          `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+            user.id
+          }/product/${product.product_id}`,
+          { withCredentials: true }
+        );
+      }
+
+      // Vaciar el carrito en el frontend
+      setCart([]);
+
+      // Redirigir a la página de "Mis Órdenes"
+      navigate("/myOrders");
+    } catch (error) {
+      console.error("Error al crear la orden o vaciar el carrito:", error);
+      alert("Hubo un error al crear la orden o vaciar el carrito");
+    }
+  };
 
   return (
     <>
@@ -39,7 +97,10 @@ const Cart = () => {
             <p className="font-normal text-base leading-7 text-gray-500 text-center mb-5 mt-6">
               Shipping taxes, and discounts calculated at checkout
             </p>
-            <button className="rounded-full py-4 px-6 bg-indigo-600 text-white font-semibold text-lg w-full text-center transition-all duration-500 hover:bg-indigo-700 ">
+            <button
+              onClick={handleCheckout} // Llamar a la función cuando se presiona Checkout
+              className="rounded-full py-4 px-6 bg-indigo-600 text-white font-semibold text-lg w-full text-center transition-all duration-500 hover:bg-indigo-700 "
+            >
               Checkout
             </button>
           </div>

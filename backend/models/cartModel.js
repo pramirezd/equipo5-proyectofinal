@@ -8,6 +8,7 @@ const getUserCart = async (id) => {
             SELECT
               cp.product_id,
               p.name,
+              p.description,
               p.price,
               cp.quantity,
               'http://localhost:${process.env.PORT}/easycommerce/products/img/' || p.img_url as img_url

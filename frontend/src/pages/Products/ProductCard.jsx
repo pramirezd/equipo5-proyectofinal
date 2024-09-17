@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"; // Para hacer las solicitudes HTTP
 import { useAuth } from "../../context/userContext"; // Para obtener el usuario autenticado
 import { useFavorite } from "../../context/favoriteContext";
@@ -10,6 +10,8 @@ const ProductCard = ({ producto }) => {
   const { user } = useAuth(); // Obtener el usuario autenticado
   const { favorites, setFavorites } = useFavorite(); // También necesitamos actualizar favorites
   const favoritesIds = favorites.map((p) => p.product_id);
+
+  const navigate = useNavigate();
 
   // useEffect para inicializar isLiked solo cuando cambian los favoritos globales
   useEffect(() => {
@@ -23,7 +25,7 @@ const ProductCard = ({ producto }) => {
   // Función para manejar el clic del corazón
   const handleLikeClick = async () => {
     if (!user || !user.id) {
-      alert("Please sign in to add favorites");
+      navigate("/login");
       return;
     }
 
@@ -65,6 +67,30 @@ const ProductCard = ({ producto }) => {
     }
   };
 
+  const handleAddToCart = async (product_id) => {
+    if (!user || !user.id) {
+      navigate("/login");
+      return;
+    }
+    try {
+      // Agregar producto al carrito en el backend
+      await axios.post(
+        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+          user.id
+        }`,
+        {
+          product_id: product_id,
+          quantity: 1,
+        },
+        { withCredentials: true }
+      );
+
+      // Llamar a fetchCart después de agregar el producto
+    } catch (error) {
+      console.error("Error al agregar producto al carrito:", error);
+    }
+  };
+
   return (
     <div className="relative m-4 p-4 rounded-lg shadow-md w-[250px] flex flex-col items-start transform transition-all duration-500 hover:-translate-y-2">
       <div className="absolute top-2 right-2">
@@ -82,34 +108,27 @@ const ProductCard = ({ producto }) => {
       </div>
 
       <div className="flex justify-center w-full">
-        <img
-          src={producto.img_url}
-          alt={producto.nombre}
-          className="w-32 h-32"
-        />
+        <img src={producto.img_url} alt={producto.name} className="w-32 h-32" />
       </div>
       <div className="flex flex-col gap-4 items-start w-full">
         <div>
-          <p>{producto.nombre}</p>
-          <p className="font-thin">
-            <span className="font-bold">
-              {"\u00A9"}
-              {producto.brand}
-            </span>
-          </p>
+          <p>{producto.name}</p>
           <div>
+            <span className="font-semibold">{producto.brand}</span>
             <p className="text-2xl text-green-600 font-bold">
               ${producto.price}
-            </p>
-            <p className="font-thin">
-              Category:{" "}
-              <span className="font-semibold">{producto.category}</span>
             </p>
           </div>
         </div>
         <Link to={`/product/${producto.id}`}>
           <button className="font-semibold hover:underline">See Details</button>
         </Link>
+        <button
+          onClick={() => handleAddToCart(producto.id)}
+          className="w-full rounded-lg p-2 bg-blue-500 text-white"
+        >
+          Add To Cart
+        </button>
       </div>
     </div>
   );

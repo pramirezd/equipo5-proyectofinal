@@ -19,7 +19,7 @@ const users = async (req, res) => {
 
 const register = async (req, res) => {
   const { name, lastname, address, phone, email, password, isadmin } = req.body;
-  console.log(res.body);
+  console.log(req.body);
   try {
     // Verificar si el usuario ya existe
     const userExist = await userModel.findUser(email);

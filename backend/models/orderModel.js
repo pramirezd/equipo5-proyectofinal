@@ -5,9 +5,18 @@ import pool from "../config/db.js";
 const getUserOrders = async (user_id) => {
   try {
     const query = `
-            SELECT *
-            FROM orders
-            WHERE user_id =$1
+      SELECT 
+          o.id,
+          o.total,
+          o.order_state,
+          o.created_at,
+          json_agg(json_build_object('product_name', p.name, 'quantity', op.quantity)) AS order_detail
+      FROM orders o
+      LEFT JOIN order_product op ON o.id = op.order_id
+      LEFT JOIN products p ON op.product_id = p.id
+      WHERE o.user_id = $1
+      GROUP BY o.id, o.total, o.order_state, o.created_at
+      ORDER BY o.id DESC;
         `;
     const response = await pool.query(query, [user_id]);
     return response.rows;
@@ -22,8 +31,15 @@ const getUserOrders = async (user_id) => {
 const getAllOrders = async () => {
   try {
     const query = `
-            SELECT *
-            FROM orders
+      select o.id order_id,
+          u.name,
+          u.lastname,
+          u.email,
+          o.total,
+          o.order_state,
+          created_at
+      from orders o
+      left join users u on o.user_id = u.id
         `;
     const response = await pool.query(query);
     return response.rows;

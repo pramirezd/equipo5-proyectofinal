@@ -57,11 +57,11 @@ const Carousel = () => {
         <SwiperSlide key={product.id}>
           <CarouselProductCard
             id={product.id}
-            name={product.nombre}
+            name={product.name}
             description={product.description}
             price={product.price}
             image={product.img_url}
-            seller={product.brand}
+            brand={product.brand}
           />
         </SwiperSlide>
       ))}
