@@ -1,5 +1,6 @@
 import { productModel } from "../models/productModel.js";
 import { categoryModel } from "../models/categoryModel.js";
+
 const products = async (req, res) => {
   try {
     const products = await productModel.getProducts();

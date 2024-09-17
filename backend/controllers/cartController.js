@@ -6,10 +6,7 @@ const getCart = async (req, res) => {
   const { user_id } = req.params;
   try {
     const cart = await cartModel.getUserCart(user_id);
-    return res.status(200).json({
-      message: "Carrito del usuario",
-      cart,
-    });
+    return res.status(200).json(cart);
   } catch (error) {
     console.error(error);
     return res.status(500).json({

@@ -41,17 +41,20 @@ const getUserFavorites = async (user_id) => {
           f.product_id,
           p.name,
           p.description,
-          p.price, p.stock,
-          p.img_url, p.brand,
+          p.price,
+          p.stock,
+          'http://localhost:${process.env.PORT}/easycommerce/products/img/' || p.img_url as img_url,
+          p.brand,
           c.name as category_name
       FROM favorites f
       LEFT JOIN products p ON f.product_id = p.id
       LEFT JOIN categories c ON p.category_id = c.id
       WHERE user_id = $1
+            AND f.product_id is not null
       `,
       [user_id]
     );
-    return query.rows[0];
+    return query.rows;
   } catch (error) {
     console.error(error);
     throw new Error("Hubo un error con la operacion GETUSERFAVORITES");

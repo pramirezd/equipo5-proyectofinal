@@ -1,10 +1,10 @@
 import React from "react";
-import Products from './Products';
+import Products from "./Products";
 
 const Showcase = () => {
   return (
     <div className="flex justify-center p-11">
-      <Products limite={4} />
+      <Products limite={10} />
     </div>
   );
 };

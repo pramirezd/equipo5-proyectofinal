@@ -4,11 +4,11 @@ import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import SwiperCore, { Autoplay } from "swiper";
 import CarouselProductCard from "./CarouselProductCard";
-import productos from "../../data.js";
+import { getProducts } from "./Products";
+import { useEffect, useState } from "react";
 
 SwiperCore.use([Autoplay]);
 
-//Mezclar los productos, para que sean al azar GRACIAS GPT
 const shuffleArray = (array) => {
   let currentIndex = array.length,
     randomIndex;
@@ -25,8 +25,23 @@ const shuffleArray = (array) => {
 
   return array;
 };
+
 const Carousel = () => {
-  const shuffledProducts = shuffleArray([...productos]);
+  const [shuffledProducts, setShuffledProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const products = await getProducts();
+        setShuffledProducts(shuffleArray(products));
+      } catch (error) {
+        console.error("Error al obtener los productos:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Swiper
       spaceBetween={30}
@@ -41,10 +56,11 @@ const Carousel = () => {
       {shuffledProducts.map((product) => (
         <SwiperSlide key={product.id}>
           <CarouselProductCard
+            id={product.id}
             name={product.nombre}
             description={product.description}
             price={product.price}
-            image={product.img}
+            image={product.img_url}
             seller={product.brand}
           />
         </SwiperSlide>

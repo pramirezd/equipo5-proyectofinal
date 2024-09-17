@@ -1,6 +1,40 @@
 import React from "react";
+import { useAuth } from "../../context/userContext"; // Si tienes un contexto de autenticación
+import { useCart } from "../../context/cartContext"; // Si tienes un contexto de carrito
+import axios from "axios";
 
-const CarouselProductCard = ({ name, description, price, image, seller }) => {
+const CarouselProductCard = ({
+  id,
+  name,
+  description,
+  price,
+  image,
+  seller,
+}) => {
+  const { user } = useAuth(); // Obtener el usuario autenticado
+  const { cart, setCart } = useCart(); // Obtener y actualizar el carrito
+  const quantity = 1; // Definir la cantidad a agregar
+
+  const handleAddToCart = async () => {
+    try {
+      // Agregar producto al carrito en el backend
+      await axios.post(
+        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+          user.id
+        }`,
+        {
+          product_id: id,
+          quantity: quantity,
+        },
+        { withCredentials: true }
+      );
+
+      // Llamar a fetchCart después de agregar el producto
+    } catch (error) {
+      console.error("Error al agregar producto al carrito:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center items-center mt-7">
       <div className="flex gap-3 rounded-lg p-7 shadow-lg">
@@ -20,7 +54,10 @@ const CarouselProductCard = ({ name, description, price, image, seller }) => {
             <p className="font-bold text-2xl text-green-600">${price}</p>
             <p className="font-thin">Credit or Debit</p>
           </div>
-          <button className="rounded-lg p-2 bg-blue-500 text-white">
+          <button
+            onClick={handleAddToCart} // Llamada correcta a la función
+            className="rounded-lg p-2 bg-blue-500 text-white"
+          >
             Add To Cart
           </button>
         </div>

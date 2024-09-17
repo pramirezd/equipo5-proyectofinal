@@ -1,11 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import axios from "axios"; // Para hacer las solicitudes HTTP
+import { useAuth } from "../../context/userContext"; // Para obtener el usuario autenticado
+import { useFavorite } from "../../context/favoriteContext";
 
 const ProductCard = ({ producto }) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const handleLikeClick = () => {
-    setIsLiked(!isLiked);
+  const [isLiked, setIsLiked] = useState(false); // Estado inicial basado en isFavorite
+  const { user } = useAuth(); // Obtener el usuario autenticado
+  const { favorites, setFavorites } = useFavorite(); // También necesitamos actualizar favorites
+  const favoritesIds = favorites.map((p) => p.product_id);
+
+  // useEffect para inicializar isLiked solo cuando cambian los favoritos globales
+  useEffect(() => {
+    if (favoritesIds.includes(producto.id)) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  }, [favoritesIds, producto.id]); // Solo ejecuta cuando cambian los favoritos globales o el producto
+
+  // Función para manejar el clic del corazón
+  const handleLikeClick = async () => {
+    if (!user || !user.id) {
+      alert("Please sign in to add favorites");
+      return;
+    }
+
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState); // Cambia el estado de isLiked inmediatamente
+
+    try {
+      if (newLikedState) {
+        // Si el producto no está marcado como favorito, hacer un POST
+        await axios.post(
+          `${
+            import.meta.env.VITE_APP_BACKEND_URL
+          }/easycommerce/favorites/user/${user.id}`,
+          {
+            product_id: producto.id,
+          },
+          { withCredentials: true } // Enviar cookies de autenticación si es necesario
+        );
+        console.log("Producto añadido a favoritos");
+
+        // Actualizar el estado global de favoritos
+        setFavorites([...favorites, { product_id: producto.id }]);
+      } else {
+        // Si el producto ya está marcado como favorito, hacer un DELETE
+        await axios.delete(
+          `${
+            import.meta.env.VITE_APP_BACKEND_URL
+          }/easycommerce/favorites/user/${user.id}/product/${producto.id}`,
+          { withCredentials: true }
+        );
+        console.log("Producto eliminado de favoritos");
+
+        // Actualizar el estado global de favoritos removiendo el producto
+        setFavorites(favorites.filter((fav) => fav.product_id !== producto.id));
+      }
+    } catch (error) {
+      console.error("Error al añadir/eliminar favorito:", error);
+      setIsLiked(!newLikedState); // Volver al estado anterior si hay error
+    }
   };
 
   return (

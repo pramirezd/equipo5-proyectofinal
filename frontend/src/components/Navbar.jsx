@@ -1,5 +1,6 @@
 import React from "react";
 import logoImage from "../img/Logo_Prueba-removebg-preview.png";
+import { useCart } from "../context/cartContext"; // Importa el contexto del carrito
 
 //Iconos
 import { FaRegUserCircle } from "react-icons/fa";
@@ -9,6 +10,12 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 //Utilidades
 import { Link } from "react-router-dom";
 const Navbar = () => {
+  const { cart } = useCart();
+  const totalItemsInCart = cart.reduce(
+    (total, product) => total + product.quantity,
+    0
+  );
+
   return (
     // Barra de navegacion
     <div className="flex justify-around items-center p-10 cursor-pointer">
@@ -48,8 +55,14 @@ const Navbar = () => {
         <Link to="/favorites">
           <FaRegHeart />
         </Link>
-        <Link to="/cart">
+        <Link to="/cart" className="relative">
           <MdOutlineShoppingCart />
+          {/* Si hay productos en el carrito, muestra el contador */}
+          {totalItemsInCart > 0 && (
+            <span className="absolute top-[-10px] right-[-10px] bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+              {totalItemsInCart}
+            </span>
+          )}
         </Link>
       </div>
     </div>

@@ -16,7 +16,6 @@ export const UserProvider = ({ children }) => {
           "http://localhost:3000/easycommerce/users/myProfile",
           { withCredentials: true }
         );
-        console.log("User data:", response.data);
         setUser(response.data);
         setAutenticado(true);
         setIsAdmin(response.data.isadmin);

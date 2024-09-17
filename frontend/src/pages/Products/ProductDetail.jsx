@@ -10,7 +10,6 @@ const ProductDetail = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simula la obtención del producto de prueba
     const fetchProduct = () => {
       const productoEncontrado = productos.find(
         (prod) => prod.id === parseInt(id)
