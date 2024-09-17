@@ -2,9 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import morgan from "morgan";
 import pool from "./config/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { setupDB } from "./config/db.js";
 //Rutas de usuario
 import productRoutes from "./routes/product.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
@@ -23,6 +25,7 @@ const port = process.env.PORT;
 
 //Middlewares
 app.use(express.json());
+app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(
   cors({
@@ -51,8 +54,16 @@ app.use("/easycommerce/favorites", favoritesRoutes);
 app.use("/easycommerce/orders", orderRoutes);
 
 //Iniciar servidor
-app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${port}`);
-});
+const startServer = async () => {
+  try {
+    await setupDB();
+    app.listen(port, () => {
+      console.log(`Servidor iniciado en el puerto ${port}`);
+    });
+  } catch (error) {
+    console.error("Error al iniciar el servidor", error.message);
+  }
+};
 
+startServer();
 export default app;
