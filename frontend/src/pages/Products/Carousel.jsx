@@ -7,8 +7,6 @@ import CarouselProductCard from "./CarouselProductCard";
 import { getProducts } from "./Products";
 import { useEffect, useState } from "react";
 
-SwiperCore.use([Autoplay]);
-
 const shuffleArray = (array) => {
   let currentIndex = array.length,
     randomIndex;
@@ -31,6 +29,10 @@ const Carousel = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+  useEffect(() => {
+    SwiperCore.use([Autoplay]);
+
+    const fetchData = async () => {
       try {
         const products = await getProducts();
         setShuffledProducts(shuffleArray(products));
@@ -40,9 +42,7 @@ const Carousel = () => {
     };
 
     fetchData();
-  }, []);
-
-  return (
+  }, []);(
     <Swiper
       spaceBetween={30}
       slidesPerView={1}
@@ -68,5 +68,8 @@ const Carousel = () => {
     </Swiper>
   );
 };
+});
+}
+
 
 export default Carousel;

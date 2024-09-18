@@ -4,6 +4,7 @@ import { useAuth } from "./userContext"; // Importa useAuth desde el userContext
 
 // Inicializar el contexto
 const FavoriteContext = createContext();
+const API_URL = 'http://localhost:3000';
 
 export const FavoriteProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
@@ -15,9 +16,7 @@ export const FavoriteProvider = ({ children }) => {
       if (user && user.id) {
         try {
           const response = await axios.get(
-            `${
-              import.meta.env.VITE_APP_BACKEND_URL
-            }/easycommerce/favorites/user/${user.id}`,
+            `${API_URL}/easycommerce/favorites/user/${user.id}`,
             {
               withCredentials: true, // Enviar cookies para autenticar al usuario
             }

@@ -1,4 +1,5 @@
-import React from "react";
+//import React from "react";
+import PropTypes from "prop-types";
 import { useAuth } from "../../context/userContext"; // Si tienes un contexto de autenticación
 import { useCart } from "../../context/cartContext"; // Si tienes un contexto de carrito
 import axios from "axios";
@@ -74,6 +75,15 @@ const CarouselProductCard = ({
       </div>
     </div>
   );
+};
+
+CarouselProductCard.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  image: PropTypes.string.isRequired,
+  brand: PropTypes.string.isRequired,
 };
 
 export default CarouselProductCard;

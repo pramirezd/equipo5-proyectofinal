@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"; // Para hacer las solicitudes HTTP
 import { useAuth } from "../../context/userContext"; // Para obtener el usuario autenticado
 import { useFavorite } from "../../context/favoriteContext";
+
+const API_URL = import.meta.env.API_URL;
+
+import PropTypes from 'prop-types';
 
 const ProductCard = ({ producto }) => {
   const [isLiked, setIsLiked] = useState(false); // Estado inicial basado en isFavorite
@@ -36,9 +40,7 @@ const ProductCard = ({ producto }) => {
       if (newLikedState) {
         // Si el producto no está marcado como favorito, hacer un POST
         await axios.post(
-          `${
-            import.meta.env.VITE_APP_BACKEND_URL
-          }/easycommerce/favorites/user/${user.id}`,
+          `${API_URL}/easycommerce/favorites/user/${user.id}`,
           {
             product_id: producto.id,
           },
@@ -51,9 +53,7 @@ const ProductCard = ({ producto }) => {
       } else {
         // Si el producto ya está marcado como favorito, hacer un DELETE
         await axios.delete(
-          `${
-            import.meta.env.VITE_APP_BACKEND_URL
-          }/easycommerce/favorites/user/${user.id}/product/${producto.id}`,
+          `${API_URL}/easycommerce/favorites/user/${user.id}/product/${producto.id}`,
           { withCredentials: true }
         );
         console.log("Producto eliminado de favoritos");
@@ -75,7 +75,7 @@ const ProductCard = ({ producto }) => {
     try {
       // Agregar producto al carrito en el backend
       await axios.post(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+        `${API_URL}/easycommerce/cart/user/${
           user.id
         }`,
         {
@@ -132,6 +132,16 @@ const ProductCard = ({ producto }) => {
       </div>
     </div>
   );
+};
+
+ProductCard.propTypes = {
+  producto: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    img_url: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    brand: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default ProductCard;

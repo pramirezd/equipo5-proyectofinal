@@ -3,6 +3,8 @@ import { useAuth } from "../../context/userContext";
 import AdminNavBar from "./AdminNavBar";
 import axios from "axios"; // Para hacer las solicitudes HTTP
 
+const API_URL = import.meta.env.API_URL;
+
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
   const { user } = useAuth();
@@ -12,7 +14,7 @@ const AllUsers = () => {
       if (user && user.id) {
         try {
           const response = await axios.get(
-            `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/users/`,
+            `${API_URL}/easycommerce/users/`,
             { withCredentials: true }
           );
           setUsers(response.data); // Guardar los usuarios en el estado
@@ -28,9 +30,7 @@ const AllUsers = () => {
   const handleDeleteUser = async (userId) => {
     try {
       await axios.delete(
-        `${
-          import.meta.env.VITE_APP_BACKEND_URL
-        }/easycommerce/users/user/${userId}`,
+        `${API_URL}/easycommerce/users/user/${userId}`,
         { withCredentials: true }
       );
       // Actualizar el estado de los usuarios eliminando el usuario borrado

@@ -5,6 +5,8 @@ import { useAuth } from "../../context/userContext";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import CartProductCard from "./CartProductCard";
 
+const API_URL = import.meta.env.API_URL;
+
 const Cart = () => {
   const { cart, setCart } = useCart();
   const { user } = useAuth(); // Obtener el usuario autenticado
@@ -35,7 +37,7 @@ const Cart = () => {
     try {
       // Enviar la orden al backend
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/orders/user/${
+        `${API_URL}/easycommerce/orders/user/${
           user.id
         }`,
         orderData,
@@ -50,7 +52,7 @@ const Cart = () => {
 
       for (const product of cart) {
         await axios.delete(
-          `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+          `${API_URL}/easycommerce/cart/user/${
             user.id
           }/product/${product.product_id}`,
           { withCredentials: true }

@@ -14,6 +14,8 @@ import {
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import AdminNavBar from "./AdminNavBar";
 
+const API_URL = import.meta.env.API_URL;
+
 const CreateProduct = () => {
   const [image, setImage] = useState(null);
   const [name, setName] = useState("");
@@ -37,7 +39,7 @@ const CreateProduct = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/categories`
+          `${API_URL}/easycommerce/categories`
         );
         setCategories(response.data); // Asigna las categorías obtenidas
       } catch (error) {
@@ -62,7 +64,7 @@ const CreateProduct = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/products`, // Ajusta la URL según sea necesario
+        `${API_URL}/easycommerce/products`, // Ajusta la URL según sea necesario
         formData,
         {
           headers: {

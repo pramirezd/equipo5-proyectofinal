@@ -6,10 +6,10 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/userContext";
 
+
+const API_URL = import.meta.env.API_URL;
 // URL de la API
-const urlApi = `${
-  import.meta.env.VITE_APP_BACKEND_URL
-}/easycommerce/products/product`;
+const urlApi = `${API_URL}/easycommerce/products/product`;
 
 const Products = () => {
   const { id } = useParams();
@@ -47,7 +47,7 @@ const Products = () => {
     try {
       // Agregar producto al carrito en el backend
       await axios.post(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+        `${API_URL}/easycommerce/cart/user/${
           user.id
         }`,
         {

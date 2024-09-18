@@ -3,8 +3,9 @@ import ProductCard from "./ProductCard";
 import { useEffect, useState } from "react";
 import { useFavorite } from "../../context/favoriteContext";
 
+const API_URL = import.meta.env.API_URL;
 // URL de la API
-const urlApi = `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/products/`;
+const urlApi = `${API_URL}/easycommerce/products/`;
 
 const Products = ({ limite, justFavorites = false }) => {
   const [products, setProducts] = useState([]);

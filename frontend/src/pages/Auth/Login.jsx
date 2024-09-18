@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // Asegúrate de que useState esté importado
+import { useState } from "react"; // Asegúrate de que useState esté importado
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import welcomeImage from "../../img/Welcome Image.png";
@@ -27,6 +27,7 @@ const Login = () => {
   };
 
   return (
+    <>
     <div className="flex flex-col justify-center items-center mt-7">
       {/* Mensaje de Bienvenida para el Login */}
       <div className="text-center">
@@ -83,7 +84,7 @@ const Login = () => {
           {error && <p className="text-red-500 mt-3">{error}</p>}{" "}
           {/* Muestra el error si hay uno */}
           <p className="text-center text-gray-500 mt-3">
-            You don't have an account?{" "}
+            You don&#39;t have an account?{" "}
             <Link to="/register">
               <span className="text-black font-bold">Sign Up</span>
             </Link>
@@ -91,6 +92,7 @@ const Login = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 

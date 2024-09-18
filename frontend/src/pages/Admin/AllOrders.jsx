@@ -3,6 +3,8 @@ import { useAuth } from "../../context/userContext";
 import AdminNavBar from "./AdminNavBar";
 import axios from "axios"; // Para hacer las solicitudes HTTP
 
+const API_URL = 'http://localhost:3000';
+
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
   const { user } = useAuth();
@@ -11,9 +13,7 @@ const AllOrders = () => {
       if (user && user.id) {
         try {
           const response = await axios.get(
-            `${
-              import.meta.env.VITE_APP_BACKEND_URL
-            }/easycommerce/orders/allOrders`,
+            `${API_URL}/easycommerce/orders/allOrders`,
             { withCredentials: true }
           );
           setOrders(response.data); // Guardar los usuarios en el estado

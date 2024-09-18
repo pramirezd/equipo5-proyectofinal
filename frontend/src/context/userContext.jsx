@@ -1,8 +1,10 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
+import PropTypes from "prop-types";
 import axios from "axios";
 
 // Inicializar el contexto
 const UserContext = createContext();
+const API_URL = 'http://localhost:3000';
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -13,7 +15,7 @@ export const UserProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/easycommerce/users/myProfile",
+          `${API_URL}/easycommerce/users/myProfile`,
           { withCredentials: true }
         );
         setUser(response.data);
@@ -32,7 +34,7 @@ export const UserProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/easycommerce/users/login",
+        `${API_URL}/easycommerce/users/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -49,7 +51,7 @@ export const UserProvider = ({ children }) => {
   const register = async (name, lastname, address, phone, email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/easycommerce/users/register",
+        `${API_URL}/easycommerce/users/register`,
         { name, lastname, address, phone, email, password },
         { withCredentials: true }
       );
@@ -60,12 +62,13 @@ export const UserProvider = ({ children }) => {
       setUser(null);
       setAutenticado(false);
       setIsAdmin(false);
+      throw error;
     }
   };
   const logout = async () => {
     try {
       await axios.post(
-        "http://localhost:3000/easycommerce/users/logout",
+        `${API_URL}/easycommerce/users/logout`,
         {},
         { withCredentials: true }
       );
@@ -84,6 +87,10 @@ export const UserProvider = ({ children }) => {
       {children}
     </UserContext.Provider>
   );
+};
+
+UserProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useAuth = () => useContext(UserContext);

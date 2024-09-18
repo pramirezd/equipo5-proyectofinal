@@ -4,6 +4,8 @@ import AdminNavBar from "./AdminNavBar";
 import axios from "axios"; // Para hacer las solicitudes HTTP
 import { useAuth } from "../../context/userContext"; // Para obtener el usuario autenticado
 
+const API_URL = import.meta.env.API_URL;
+
 const CreateCategory = () => {
   const [category_name, setCategoryName] = useState("");
   const { user } = useAuth;
@@ -13,7 +15,7 @@ const CreateCategory = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/categories/`, // Ajusta la URL según sea necesario
+        `${API_URL}/easycommerce/categories/`, // Ajusta la URL según sea necesario
         { name: category_name },
         { withCredentials: true } // Para enviar cookies de autenticación si es necesario}
       );

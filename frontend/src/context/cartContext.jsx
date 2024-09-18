@@ -1,9 +1,11 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
+import PropTypes from "prop-types";
 import axios from "axios";
 import { useAuth } from "./userContext"; // Importa useAuth desde el userContext
 
 // Inicializar el contexto
 const CartContext = createContext();
+const API_URL = 'http://localhost:3000';
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
@@ -15,7 +17,7 @@ export const CartProvider = ({ children }) => {
       if (user && user.id) {
         try {
           const response = await axios.get(
-            `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+            `${API_URL}/easycommerce/cart/user/${
               user.id
             }`,
             { withCredentials: true }
@@ -34,6 +36,10 @@ export const CartProvider = ({ children }) => {
       {children}
     </CartContext.Provider>
   );
+};
+
+CartProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useCart = () => useContext(CartContext);

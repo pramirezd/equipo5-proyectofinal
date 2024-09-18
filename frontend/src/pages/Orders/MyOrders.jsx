@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/userContext"; // Para obtener el usuario autenticado
 
+
+
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const { user } = useAuth(); // Obtener el usuario autenticado

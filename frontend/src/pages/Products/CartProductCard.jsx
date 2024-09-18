@@ -5,6 +5,8 @@ import { useAuth } from "../../context/userContext";
 import { useCart } from "../../context/cartContext";
 import axios from "axios"; // Para hacer las solicitudes HTTP
 
+const API_URL = import.meta.env.API_URL;
+
 const CartProductCard = ({ producto }) => {
   const { user } = useAuth(); // Obtener el usuario autenticado
   const { cart, setCart } = useCart(); // Obtener el carrito y la función para actualizarlo
@@ -13,7 +15,7 @@ const CartProductCard = ({ producto }) => {
   const handleRemoveClick = async () => {
     try {
       await axios.delete(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+        `${API_URL}/easycommerce/cart/user/${
           user.id
         }/product/${producto.product_id}`,
         { withCredentials: true }
@@ -40,7 +42,7 @@ const CartProductCard = ({ producto }) => {
 
     try {
       const result = await axios.post(
-        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
+        `${API_URL}/easycommerce/cart/user/${
           user.id
         }`,
         {
