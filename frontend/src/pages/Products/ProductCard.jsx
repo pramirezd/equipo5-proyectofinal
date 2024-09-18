@@ -7,6 +7,8 @@ import { useFavorite } from "../../context/favoriteContext";
 
 const API_URL = import.meta.env.API_URL;
 
+import PropTypes from 'prop-types';
+
 const ProductCard = ({ producto }) => {
   const [isLiked, setIsLiked] = useState(false); // Estado inicial basado en isFavorite
   const { user } = useAuth(); // Obtener el usuario autenticado
@@ -130,6 +132,16 @@ const ProductCard = ({ producto }) => {
       </div>
     </div>
   );
+};
+
+ProductCard.propTypes = {
+  producto: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    img_url: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    brand: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default ProductCard;
