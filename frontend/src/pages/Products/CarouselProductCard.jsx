@@ -77,13 +77,4 @@ const CarouselProductCard = ({
   );
 };
 
-CarouselProductCard.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired,
-  brand: PropTypes.string.isRequired,
-};
-
 export default CarouselProductCard;

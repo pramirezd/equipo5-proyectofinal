@@ -1,3 +1,4 @@
+import React from "react";
 import logoImage from "../img/Logo_Prueba-removebg-preview.png";
 import { useCart } from "../context/cartContext"; // Importa el contexto del carrito
 import { useAuth } from "../context/userContext"; // Importa el contexto de autenticación
@@ -20,6 +21,7 @@ const Navbar = () => {
     (total, product) => total + product.quantity,
     0
   );
+  const totalFavorites = favorites.length;
 
   return (
     <div>

@@ -99,13 +99,13 @@ const setupDB = async () => {
       );
       `);
 
-      const hashPassword1 = await bcrypt.hash("mypassword", 10);
+      const hashPassword = await bcrypt.hash("mypassword", 10);
 
     // Insertar datos
     await pool.query(`
       -- Insertar datos en la tabla de usuarios con contraseñas cifradas
       INSERT INTO users (name, lastname, address, phone, email, password, isadmin) VALUES
-      ('test', 'user', '123 Test St', '999999999', 'test@example.com', '${hashPassword1}', TRUE),
+      ('test', 'user', '123 Test St', '999999999', 'test@example.com', '${hashPassword}', TRUE),
       ('Juan', 'Pérez', 'Av. Libertador 123, Santiago', '987654321', 'juan.perez1@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
       ('María', 'González', 'Calle Falsa 456, Viña del Mar', '912345678', 'maria.gonzalez1@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', FALSE),
       ('Carlos', 'Sánchez', 'Pasaje Los Cedros 789, Concepción', '934567890', 'carlos.sanchez1@example.com', '$2b$10$g93Wl6K6./XVFbCT7LU8YO2rQv.B/5/JpG7XvzMN2WbUQUUwLtOg2', TRUE),
