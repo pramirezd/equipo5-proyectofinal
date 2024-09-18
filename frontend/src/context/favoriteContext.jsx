@@ -4,7 +4,7 @@ import { useAuth } from "./userContext"; // Importa useAuth desde el userContext
 
 // Inicializar el contexto
 const FavoriteContext = createContext();
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.API_URL;
 
 export const FavoriteProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);

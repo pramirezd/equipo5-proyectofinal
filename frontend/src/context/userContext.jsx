@@ -4,7 +4,7 @@ import axios from "axios";
 
 // Inicializar el contexto
 const UserContext = createContext();
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.API_URL;
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);

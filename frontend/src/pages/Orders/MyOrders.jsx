@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/userContext"; // Para obtener el usuario autenticado
 
-
+const API_URL = import.meta.env.API_URL;
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -12,7 +12,7 @@ const MyOrders = () => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/orders/user/${
+          `${API_URL}/easycommerce/orders/user/${
             user.id
           }`,
           { withCredentials: true } // Enviar cookies de autenticación

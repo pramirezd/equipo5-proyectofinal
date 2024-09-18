@@ -5,7 +5,7 @@ import { useAuth } from "./userContext"; // Importa useAuth desde el userContext
 
 // Inicializar el contexto
 const CartContext = createContext();
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.API_URL;
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);

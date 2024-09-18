@@ -3,7 +3,7 @@ import { useAuth } from "../../context/userContext";
 import AdminNavBar from "./AdminNavBar";
 import axios from "axios"; // Para hacer las solicitudes HTTP
 
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.API_URL;
 
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
