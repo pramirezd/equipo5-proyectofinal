@@ -11,7 +11,7 @@ const getUserCart = async (id) => {
               p.description,
               p.price,
               cp.quantity,
-              'http://localhost:${process.env.PORT}/easycommerce/products/img/' || p.img_url as img_url
+              'http://localhost:${process.env.DB_PORT}/easycommerce/products/img/' || p.img_url as img_url
             FROM carts c
             JOIN cart_product cp ON c.id = cp.cart_id
             JOIN products p ON cp.product_id = p.id

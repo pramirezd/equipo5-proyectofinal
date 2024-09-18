@@ -21,7 +21,7 @@ pool;
 
 //Servidor
 const app = express();
-const port = process.env.PORT;
+const port = process.env.DB_PORT;
 
 //Middlewares
 app.use(express.json());
