@@ -1,4 +1,10 @@
-import React, { useState, createContext, useContext, useEffect } from "react";
+import React, {
+  useState,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
 import axios from "axios";
 
 // Inicializar el contexto
@@ -8,9 +14,11 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [autenticado, setAutenticado] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${
@@ -26,10 +34,12 @@ export const UserProvider = ({ children }) => {
         setUser(null);
         setAutenticado(false);
         setIsAdmin(false);
+      } finally {
+        setLoading(false);
       }
     };
     checkAuth();
-  }, [autenticado]);
+  }, []);
 
   const login = async (email, password) => {
     try {
@@ -45,9 +55,10 @@ export const UserProvider = ({ children }) => {
       setUser(null);
       setAutenticado(false);
       setIsAdmin(false);
-      throw error;
+      throw new Error("Login failed. Please check your credentials.");
     }
   };
+
   const register = async (name, lastname, address, phone, email, password) => {
     try {
       const response = await axios.post(
@@ -62,8 +73,10 @@ export const UserProvider = ({ children }) => {
       setUser(null);
       setAutenticado(false);
       setIsAdmin(false);
+      throw new Error("Registration failed.");
     }
   };
+
   const logout = async () => {
     try {
       await axios.post(
@@ -75,16 +88,28 @@ export const UserProvider = ({ children }) => {
       setAutenticado(false);
       setIsAdmin(false);
     } catch (error) {
-      throw error;
+      throw new Error("Logout failed.");
     }
   };
 
+  const authValue = useMemo(
+    () => ({
+      user,
+      autenticado,
+      isAdmin,
+      login,
+      register,
+      logout,
+    }),
+    [user, autenticado, isAdmin]
+  );
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
   return (
-    <UserContext.Provider
-      value={{ user, autenticado, isAdmin, login, register, logout }}
-    >
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={authValue}>{children}</UserContext.Provider>
   );
 };
 
