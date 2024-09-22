@@ -25,16 +25,13 @@ const PORT = process.env.PORT;
 //Middlewares
 app.use(express.json());
 app.use(cookieParser());
-// app.use(
-//   cors({
-//     origin: process.env.STATIC_SITE,
-//     credentials: true,
-//     sameSite: "none",
-//   })
-// ); //Configurar despues
+app.use(
+  cors({
+    origin: process.env.STATIC_SITE,
+    credentials: true,
+  })
+);
 
-// Middlewares
-app.use(cors());
 app.use(morgan("dev"));
 
 const __filename = fileURLToPath(import.meta.url);
