@@ -100,80 +100,19 @@ INSERT INTO users (name, lastname, address, phone, email, password, isadmin) VAL
 
 -- Insertar datos en la tabla de categorías
 INSERT INTO categories (name) VALUES
-('Electrónica'),
-('Ropa'),
-('Hogar'),
-('Deportes');
+('Selecciones'),
+('Premiere League'),
+('Liga Chilena');
 
 -- Insertar datos en la tabla de productos con category_id
 INSERT INTO products (name, description, price, stock, img_url, brand, category_id) VALUES
-('Smartphone XYZ', 'Último modelo de smartphone con pantalla OLED.', 499.99, 50, 'https://example.com/smartphone_xyz.jpg', 'TechCorp', 1),
-('Camiseta Deportiva', 'Camiseta de alto rendimiento para actividades deportivas.', 29.99, 150, 'https://example.com/camiseta_deportiva.jpg', 'SportFit', 2),
-('Cafetera Espresso', 'Cafetera automática para espresso de alta calidad.', 89.99, 30, 'https://example.com/cafetera_espresso.jpg', 'CoffeeMax', 3),
-('Bicicleta Montaña', 'Bicicleta todo terreno con suspensión avanzada.', 349.99, 20, 'https://example.com/bicicleta_montana.jpg', 'MountainBike Co.', 4),
-('Televisor 4K', 'Televisor 4K Ultra HD con HDR.', 599.99, 15, 'https://example.com/televisor_4k.jpg', 'ScreenMaster', 1);
-
--- Insertar datos en la tabla de carritos
-INSERT INTO carts (user_id) VALUES
-(1),
-(2),
-(3),
-(4),
-(5),
-(6),
-(7),
-(8),
-(9),
-(10);
-
--- Insertar datos en la tabla de productos en el carrito
-INSERT INTO cart_product (cart_id, product_id, quantity) VALUES
-(1, 1, 2),
-(2, 2, 1),
-(3, 3, 1),
-(4, 4, 1),
-(5, 5, 1),
-(6, 1, 3),
-(7, 2, 2),
-(8, 3, 1),
-(9, 4, 1),
-(10, 5, 1);
-
--- Insertar datos en la tabla de órdenes
-INSERT INTO orders (user_id, total, order_state) VALUES
-(1, 999.98, 'En proceso'),
-(2, 29.99, 'Completada'),
-(3, 89.99, 'Completada'),
-(4, 349.99, 'Enviada'),
-(5, 599.99, 'Cancelada'),
-(6, 1499.97, 'En proceso'),
-(7, 59.98, 'Enviada'),
-(8, 89.99, 'Cancelada'),
-(9, 349.99, 'Completada'),
-(10, 599.99, 'En proceso');
-
--- Insertar datos en la tabla de relación entre órdenes y productos
-INSERT INTO order_product (order_id, product_id, quantity) VALUES
-(1, 1, 2),
-(2, 2, 1),
-(3, 3, 1),
-(4, 4, 1),
-(5, 5, 1),
-(6, 1, 3),
-(7, 2, 2),
-(8, 3, 1),
-(9, 4, 1),
-(10, 5, 1);
-
--- Insertar datos en la tabla de favoritos
-INSERT INTO favorites (user_id, product_id) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 1),
-(7, 2),
-(8, 3),
-(9, 4),
-(10, 5);
+('Seleccion Argentina', '¡Tu Camiseta Argentina Adidas Local 24/25 puede ser tuya!', 65990, 50, 'argentina.jpg', 'Adidas', 1),
+('Seleccion Brasileña', '¡Tu Camiseta Brasil Nike Local 24/25 puede ser tuya!', 65990, 50, 'brasil.jpg', 'Nike', 1),
+('Seleccion Chilena', '¡Tu Camiseta Selección Chilena Adidas Local 24/25 puede ser tuya!', 65990, 50, 'chile.jpg', 'Adidas', 1),
+('Seleccion Japón Dragón Ball', '¡Tu Camiseta Japón Adidas Dragón Ball Versión Jugador puede ser tuya!', 65990, 50, 'japon.jpg', 'Adidas', 1),
+('Chelsea', '¡Tu Camiseta Chelsea Nike Local 24/25 puede ser tuya!', 65990, 50, 'chelsea.jpg', 'Nike', 2),
+('Manchester City', '¡Tu Camiseta Manchester City Puma Local 24/25 puede ser tuya!', 65990, 50, 'city.jpg', 'Puma', 2),
+('Liverpool', '¡Tu Camiseta Liverpool Nike Local 24/25 puede ser tuya!', 65990, 50, 'liverpool.jpg', 'Nike', 2),
+('Universidad Católica', '¡Tu Camiseta Universidad Católica Puma Local 24/25 puede ser tuya!', 65990, 50, 'catolica.jpg', 'Puma', 3),
+('Universidad de Chile', '¡Tu Camiseta Universidad de Chile Adidas Local 24/25 puede ser tuya!', 65990, 50, 'udechile.jpg', 'Adidas', 3),
+('Colo-Colo', '¡Tu Camiseta Colo Colo Adidas Local 24/25 puede ser tuya!', 65990, 50, 'colo-colo.jpg', 'Adidas', 3);
