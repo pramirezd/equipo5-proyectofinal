@@ -28,6 +28,7 @@ app.use(
   cors({
     origin: process.env.STATIC_SITE,
     credentials: true,
+    sameSite: "none",
   })
 ); //Configurar despues
 

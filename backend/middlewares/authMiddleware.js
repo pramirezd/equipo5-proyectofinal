@@ -4,11 +4,10 @@ dotenv.config();
 
 const authToken = async (req, res, next) => {
   try {
-    const token = localStorage.getItem("token_access") || null;
-    // req.cookies.token_access || req.headers["authorization"]?.split(" ")[1];
+    const token = req.cookies.token_access;
     if (!token) {
       return res.status(403).json({
-        message: token,
+        message: "Este usuario no tiene un token",
       });
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
