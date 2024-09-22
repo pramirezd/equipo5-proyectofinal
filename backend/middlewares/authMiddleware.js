@@ -9,6 +9,7 @@ const authToken = async (req, res, next) => {
     if (!token) {
       return res.status(403).json({
         message: "Este usuario no tiene un token",
+        token: token,
       });
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
