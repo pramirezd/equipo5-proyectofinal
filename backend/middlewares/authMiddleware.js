@@ -8,8 +8,7 @@ const authToken = async (req, res, next) => {
       req.cookies.token_access || req.headers["authorization"]?.split(" ")[1];
     if (!token) {
       return res.status(403).json({
-        message: "Este usuario no tiene un token",
-        token: token,
+        message: token,
       });
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
