@@ -13,7 +13,9 @@ export const UserProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/easycommerce/users/myProfile",
+          `${
+            import.meta.env.VITE_APP_BACKEND_URL
+          }/easycommerce/users/myProfile`,
           { withCredentials: true }
         );
         setUser(response.data);
@@ -32,7 +34,7 @@ export const UserProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/easycommerce/users/login",
+        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/users/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -49,7 +51,7 @@ export const UserProvider = ({ children }) => {
   const register = async (name, lastname, address, phone, email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/easycommerce/users/register",
+        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/users/register`,
         { name, lastname, address, phone, email, password },
         { withCredentials: true }
       );
@@ -65,7 +67,7 @@ export const UserProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(
-        "http://localhost:3000/easycommerce/users/logout",
+        `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/users/logout`,
         {},
         { withCredentials: true }
       );

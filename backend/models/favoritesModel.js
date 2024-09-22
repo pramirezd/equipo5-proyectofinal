@@ -43,7 +43,7 @@ const getUserFavorites = async (user_id) => {
           p.description,
           p.price,
           p.stock,
-          'http://localhost:${process.env.PORT}/easycommerce/products/img/' || p.img_url as img_url,
+          '${process.env.APP_BACKEND_URL}/easycommerce/products/img/' || p.img_url as img_url,
           p.brand,
           c.name as category_name
       FROM favorites f
