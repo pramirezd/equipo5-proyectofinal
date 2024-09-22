@@ -14,7 +14,8 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [autenticado, setAutenticado] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [autenticando, setAutenticando] = useState(false); // Estado para el login o registro
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -38,10 +39,15 @@ export const UserProvider = ({ children }) => {
         setLoading(false);
       }
     };
-    checkAuth();
-  }, []);
+
+    // Ejecutar checkAuth solo si no estamos autenticando (login o registro)
+    if (!autenticando) {
+      checkAuth();
+    }
+  }, [autenticando]); // Ejecutar cuando el estado de autenticación cambia
 
   const login = async (email, password) => {
+    setAutenticando(true);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/users/login`,
@@ -52,14 +58,18 @@ export const UserProvider = ({ children }) => {
       setAutenticado(true);
       setIsAdmin(response.data.isadmin);
     } catch (error) {
+      console.error("Error logging in:", error);
       setUser(null);
       setAutenticado(false);
       setIsAdmin(false);
       throw new Error("Login failed. Please check your credentials.");
+    } finally {
+      setAutenticando(false); // Autenticación completada
     }
   };
 
   const register = async (name, lastname, address, phone, email, password) => {
+    setAutenticando(true);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/users/register`,
@@ -70,10 +80,13 @@ export const UserProvider = ({ children }) => {
       setAutenticado(true);
       setIsAdmin(response.data.isadmin);
     } catch (error) {
+      console.error("Error during registration:", error);
       setUser(null);
       setAutenticado(false);
       setIsAdmin(false);
       throw new Error("Registration failed.");
+    } finally {
+      setAutenticando(false); // Autenticación completada
     }
   };
 
@@ -105,7 +118,7 @@ export const UserProvider = ({ children }) => {
   );
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return <div>Cargando...</div>; // Mostrar indicador de carga mientras se verifica la autenticación
   }
 
   return (
