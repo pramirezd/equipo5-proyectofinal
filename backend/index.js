@@ -5,6 +5,7 @@ import cors from "cors";
 import { pool, setupDatabase } from "./config/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import morgan from "morgan";
 //Rutas de usuario
 import productRoutes from "./routes/product.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
@@ -24,13 +25,17 @@ const PORT = process.env.PORT;
 //Middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: process.env.STATIC_SITE,
-    credentials: true,
-    sameSite: "none",
-  })
-); //Configurar despues
+// app.use(
+//   cors({
+//     origin: process.env.STATIC_SITE,
+//     credentials: true,
+//     sameSite: "none",
+//   })
+// ); //Configurar despues
+
+// Middlewares
+app.use(cors());
+app.use(morgan("dev"));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
