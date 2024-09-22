@@ -4,8 +4,8 @@ dotenv.config();
 
 const authToken = async (req, res, next) => {
   try {
-    const token =
-      req.cookies.token_access || req.headers["authorization"]?.split(" ")[1];
+    const token = localStorage.getItem("token_access") || null;
+    // req.cookies.token_access || req.headers["authorization"]?.split(" ")[1];
     if (!token) {
       return res.status(403).json({
         message: token,
