@@ -1,5 +1,5 @@
 //Importar la base de datos
-import pool from "../config/db.js";
+import { pool } from "../config/db.js";
 
 const getProducts = async () => {
   try {

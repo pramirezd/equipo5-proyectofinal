@@ -1,4 +1,4 @@
-import pool from "../config/db.js";
+import { pool } from "../config/db.js";
 
 const addFavoriteUserProduct = async (user_id, product_id) => {
   try {
