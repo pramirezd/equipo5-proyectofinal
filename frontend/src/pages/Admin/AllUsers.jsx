@@ -6,7 +6,6 @@ import axios from "axios"; // Para hacer las solicitudes HTTP
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
   const { user } = useAuth();
-  console.log(users);
   useEffect(() => {
     const fetchUsers = async () => {
       if (user && user.id) {

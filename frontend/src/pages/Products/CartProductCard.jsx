@@ -49,7 +49,6 @@ const CartProductCard = ({ producto }) => {
         },
         { withCredentials: true }
       );
-      console.log(result);
 
       // Actualiza el estado del carrito
       setCart((prevCart) => {
