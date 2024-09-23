@@ -5,12 +5,7 @@ import { AuthMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get(
-  "/",
-  AuthMiddleware.authToken,
-  AuthMiddleware.isAdmin,
-  userController.users
-);
+router.get("/", AuthMiddleware.authToken, userController.users);
 router.post("/register", userController.register);
 router.post("/login", userController.login);
 router.post("/logout", userController.logout);
