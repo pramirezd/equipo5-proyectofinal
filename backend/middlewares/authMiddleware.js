@@ -13,8 +13,8 @@ const authToken = async (req, res, next) => {
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified;
 
-    console.log("req.params", req.params);
-    console.log("req.params", req.user);
+    console.log("req.body", req.body);
+    console.log("req.user", req.user);
 
     const { user_id } = req.params;
     const user = req.user;
