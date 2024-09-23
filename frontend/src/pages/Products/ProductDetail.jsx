@@ -5,6 +5,7 @@ import { useFavorite } from "../../context/favoriteContext";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/userContext";
+import { useCart } from "../../context/cartContext";
 
 // URL de la API
 const urlApi = `${
@@ -18,6 +19,7 @@ const Products = () => {
   const [producto, setProducto] = useState(null);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
+  const { setCart, fetchCart } = useCart();
   const favoritesIds = favorites.map((p) => p.product_id);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ const Products = () => {
   const handleAddToCart = async () => {
     try {
       // Agregar producto al carrito en el backend
-      await axios.post(
+      response = await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
           user.id
         }`,
@@ -56,7 +58,8 @@ const Products = () => {
         },
         { withCredentials: true }
       );
-
+      setCart(response.data);
+      fetchCart();
       // Llamar a fetchCart después de agregar el producto
     } catch (error) {
       console.error("Error al agregar producto al carrito:", error);

@@ -4,23 +4,25 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"; // Para hacer las solicitudes HTTP
 import { useAuth } from "../../context/userContext"; // Para obtener el usuario autenticado
 import { useFavorite } from "../../context/favoriteContext";
+import { useCart } from "../../context/cartContext";
 
 const ProductCard = ({ producto }) => {
   const [isLiked, setIsLiked] = useState(false); // Estado inicial basado en isFavorite
   const { user } = useAuth(); // Obtener el usuario autenticado
   const { favorites, setFavorites } = useFavorite(); // También necesitamos actualizar favorites
+  const { setCart, fetchCart } = useCart();
   const favoritesIds = favorites.map((p) => p.product_id);
 
   const navigate = useNavigate();
 
   // useEffect para inicializar isLiked solo cuando cambian los favoritos globales
   useEffect(() => {
-    if (favoritesIds.includes(producto.id)) {
+    if (favorites && favoritesIds.includes(producto.id)) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
     }
-  }, [favoritesIds, producto.id]); // Solo ejecuta cuando cambian los favoritos globales o el producto
+  }, [favorites, producto.id]); // Dependencia de `favorites`
 
   // Función para manejar el clic del corazón
   const handleLikeClick = async () => {
@@ -47,7 +49,10 @@ const ProductCard = ({ producto }) => {
         console.log("Producto añadido a favoritos");
 
         // Actualizar el estado global de favoritos
-        setFavorites([...favorites, { product_id: producto.id }]);
+        setFavorites((prevFavorites) => [
+          ...prevFavorites,
+          { product_id: producto.id },
+        ]);
       } else {
         // Si el producto ya está marcado como favorito, hacer un DELETE
         await axios.delete(
@@ -59,7 +64,9 @@ const ProductCard = ({ producto }) => {
         console.log("Producto eliminado de favoritos");
 
         // Actualizar el estado global de favoritos removiendo el producto
-        setFavorites(favorites.filter((fav) => fav.product_id !== producto.id));
+        setFavorites((prevFavorites) =>
+          prevFavorites.filter((fav) => fav.product_id !== producto.id)
+        );
       }
     } catch (error) {
       console.error("Error al añadir/eliminar favorito:", error);
@@ -74,7 +81,7 @@ const ProductCard = ({ producto }) => {
     }
     try {
       // Agregar producto al carrito en el backend
-      await axios.post(
+      response = await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
           user.id
         }`,
@@ -84,7 +91,8 @@ const ProductCard = ({ producto }) => {
         },
         { withCredentials: true }
       );
-
+      setCart(response.data);
+      fetchCart();
       // Llamar a fetchCart después de agregar el producto
     } catch (error) {
       console.error("Error al agregar producto al carrito:", error);
