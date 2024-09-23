@@ -9,20 +9,20 @@ import { useCart } from "../../context/cartContext";
 const ProductCard = ({ producto }) => {
   const [isLiked, setIsLiked] = useState(false); // Estado inicial basado en isFavorite
   const { user } = useAuth(); // Obtener el usuario autenticado
+  const { fetchCart } = useCart();
   const { favorites, setFavorites } = useFavorite(); // También necesitamos actualizar favorites
-  const { setCart, fetchCart } = useCart();
   const favoritesIds = favorites.map((p) => p.product_id);
 
   const navigate = useNavigate();
 
   // useEffect para inicializar isLiked solo cuando cambian los favoritos globales
   useEffect(() => {
-    if (favorites && favoritesIds.includes(producto.id)) {
+    if (favoritesIds.includes(producto.id)) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
     }
-  }, [favorites, producto.id]); // Dependencia de `favorites`
+  }, [favoritesIds, producto.id]); // Solo ejecuta cuando cambian los favoritos globales o el producto
 
   // Función para manejar el clic del corazón
   const handleLikeClick = async () => {
@@ -49,10 +49,7 @@ const ProductCard = ({ producto }) => {
         console.log("Producto añadido a favoritos");
 
         // Actualizar el estado global de favoritos
-        setFavorites((prevFavorites) => [
-          ...prevFavorites,
-          { product_id: producto.id },
-        ]);
+        setFavorites([...favorites, { product_id: producto.id }]);
       } else {
         // Si el producto ya está marcado como favorito, hacer un DELETE
         await axios.delete(
@@ -64,9 +61,7 @@ const ProductCard = ({ producto }) => {
         console.log("Producto eliminado de favoritos");
 
         // Actualizar el estado global de favoritos removiendo el producto
-        setFavorites((prevFavorites) =>
-          prevFavorites.filter((fav) => fav.product_id !== producto.id)
-        );
+        setFavorites(favorites.filter((fav) => fav.product_id !== producto.id));
       }
     } catch (error) {
       console.error("Error al añadir/eliminar favorito:", error);
@@ -81,7 +76,7 @@ const ProductCard = ({ producto }) => {
     }
     try {
       // Agregar producto al carrito en el backend
-      response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
           user.id
         }`,
@@ -91,7 +86,6 @@ const ProductCard = ({ producto }) => {
         },
         { withCredentials: true }
       );
-      setCart(response.data);
       fetchCart();
       // Llamar a fetchCart después de agregar el producto
     } catch (error) {
