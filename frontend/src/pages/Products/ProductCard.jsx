@@ -9,7 +9,7 @@ import { useCart } from "../../context/cartContext";
 const ProductCard = ({ producto }) => {
   const [isLiked, setIsLiked] = useState(false); // Estado inicial basado en isFavorite
   const { user } = useAuth(); // Obtener el usuario autenticado
-  const { fetchCart } = useCart();
+  const { setCart, fetchCart } = useCart();
   const { favorites, setFavorites } = useFavorite(); // También necesitamos actualizar favorites
   const favoritesIds = favorites.map((p) => p.product_id);
 
@@ -76,7 +76,7 @@ const ProductCard = ({ producto }) => {
     }
     try {
       // Agregar producto al carrito en el backend
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
           user.id
         }`,
@@ -86,6 +86,7 @@ const ProductCard = ({ producto }) => {
         },
         { withCredentials: true }
       );
+      setCart(response.data);
       fetchCart();
       // Llamar a fetchCart después de agregar el producto
     } catch (error) {

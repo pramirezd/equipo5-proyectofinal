@@ -13,7 +13,7 @@ const CarouselProductCard = ({
   brand,
 }) => {
   const { user } = useAuth(); // Obtener el usuario autenticado
-  const { cart, setCart } = useCart(); // Obtener y actualizar el carrito
+  const { setCart, fetchCart } = useCart(); // Obtener y actualizar el carrito
   const quantity = 1; // Definir la cantidad a agregar
 
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const CarouselProductCard = ({
     }
     try {
       // Agregar producto al carrito en el backend
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
           user.id
         }`,
@@ -35,7 +35,8 @@ const CarouselProductCard = ({
         },
         { withCredentials: true }
       );
-
+      setCart(response.data);
+      fetchCart();
       // Llamar a fetchCart después de agregar el producto
     } catch (error) {
       console.error("Error al agregar producto al carrito:", error);

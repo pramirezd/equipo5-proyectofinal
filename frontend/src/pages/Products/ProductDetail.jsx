@@ -37,7 +37,6 @@ const Products = () => {
       }
       setLoading(false);
     };
-
     fetchProduct();
   }, [id]);
 
@@ -48,7 +47,7 @@ const Products = () => {
   const handleAddToCart = async () => {
     try {
       // Agregar producto al carrito en el backend
-      response = await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/easycommerce/cart/user/${
           user.id
         }`,
