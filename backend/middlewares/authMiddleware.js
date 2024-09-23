@@ -17,7 +17,7 @@ const authToken = async (req, res, next) => {
     const { user_id } = req.params;
     const user = req.user;
 
-    if (user.isAdmin || user_id === user.id) {
+    if (user_id === user.id) {
       next();
     } else {
       return res.status(403).json({
