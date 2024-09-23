@@ -21,10 +21,5 @@ router.delete(
   userController.deleteUser
 );
 router.get("/myProfile", AuthMiddleware.authToken, userController.myProfile);
-router.put(
-  "/user/:id",
-  AuthMiddleware.authToken,
-  AuthMiddleware.isAdmin,
-  userController.updateUser
-);
+router.put("/user/:id", AuthMiddleware.authToken, userController.updateUser);
 export default router;
