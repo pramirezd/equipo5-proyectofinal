@@ -4,7 +4,7 @@ dotenv.config();
 
 const authToken = async (req, res, next) => {
   try {
-    const token = req.cookies.token_access;
+    const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(403).json({
         message: "Este usuario no tiene un token",
@@ -32,8 +32,7 @@ const authToken = async (req, res, next) => {
   }
 };
 const isAdmin = (req, res, next) => {
-  const token =
-    req.cookies.token_access || req.headers["authorization"]?.split(" ")[1];
+  const token = req.headers.authorization?.split(" ")[1];
   const user = jwt.decode(token);
   if (user.isAdmin) {
     next();
