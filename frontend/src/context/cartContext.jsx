@@ -27,7 +27,7 @@ export const CartProvider = ({ children }) => {
       }
     };
     fetchCart();
-  }, [user]);
+  }, [user, cart]);
 
   return (
     <CartContext.Provider value={{ cart, setCart }}>
