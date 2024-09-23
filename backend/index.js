@@ -2,9 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import pool from "./config/db.js";
+import { pool, setupDatabase } from "./config/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import morgan from "morgan";
 //Rutas de usuario
 import productRoutes from "./routes/product.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
@@ -19,17 +20,19 @@ pool;
 
 //Servidor
 const app = express();
-const port = process.env.PORT;
+const PORT = process.env.PORT;
 
 //Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: process.env.STATIC_SITE,
     credentials: true,
   })
-); //Configurar despues
+);
+
+app.use(morgan("dev"));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,9 +53,22 @@ app.use("/easycommerce/favorites", favoritesRoutes);
 //Rutas de las ordenes
 app.use("/easycommerce/orders", orderRoutes);
 
-//Iniciar servidor
-app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${port}`);
-});
+// Iniciar el servidor
+const startServer = async () => {
+  try {
+    // Realizar el setup de la base de datos
+    await setupDatabase();
+
+    // Iniciar el servidor en el puerto definido
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error al iniciar el servidor:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 export default app;

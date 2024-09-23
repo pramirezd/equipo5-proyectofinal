@@ -19,6 +19,7 @@ const users = async (req, res) => {
 
 const register = async (req, res) => {
   const { name, lastname, address, phone, email, password, isadmin } = req.body;
+  console.log(req.body);
   try {
     // Verificar si el usuario ya existe
     const userExist = await userModel.findUser(email);
@@ -54,7 +55,8 @@ const register = async (req, res) => {
     const cookieOptions = {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "PROD" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "PROD",
     };
     res.cookie("token_access", token, cookieOptions);
     return res.status(201).json({
@@ -96,9 +98,11 @@ const login = async (req, res) => {
     const cookieOptions = {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "PROD" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "PROD",
     };
     res.cookie("token_access", token, cookieOptions);
+    console.log(token);
     return res.status(200).json({
       message: "Sesión iniciada con éxito",
       user: payload,

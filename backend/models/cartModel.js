@@ -1,11 +1,17 @@
-import pool from "../config/db.js";
+import { pool } from "../config/db.js";
 
 //Obtener los carritos por usuario
 
 const getUserCart = async (id) => {
   try {
     const query = `
-            SELECT cp.product_id, p.name, p.price, cp.quantity
+            SELECT
+              cp.product_id,
+              p.name,
+              p.description,
+              p.price,
+              cp.quantity,
+              '${process.env.APP_BACKEND_URL}/easycommerce/products/img/' || p.img_url as img_url
             FROM carts c
             JOIN cart_product cp ON c.id = cp.cart_id
             JOIN products p ON cp.product_id = p.id

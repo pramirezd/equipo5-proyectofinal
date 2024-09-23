@@ -31,4 +31,6 @@ router.put(
   AuthMiddleware.isAdmin,
   productController.updateProduct
 );
+
+router.use("/img", express.static("uploads"));
 export default router;

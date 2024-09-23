@@ -23,10 +23,7 @@ const getUserOrders = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const orders = await orderModel.getAllOrders();
-    return res.status(200).json({
-      message: "Todas las ordenes",
-      orders,
-    });
+    return res.status(200).json(orders);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
