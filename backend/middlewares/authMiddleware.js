@@ -4,7 +4,6 @@ dotenv.config();
 
 const authToken = async (req, res, next) => {
   try {
-    console.log("cookie", req);
     const token = req.cookies.token_access;
     if (!token) {
       return res.status(403).json({
@@ -13,6 +12,9 @@ const authToken = async (req, res, next) => {
     }
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified;
+
+    console.log("req.params", req.params);
+    console.log("req.params", req.user);
 
     const { user_id } = req.params;
     const user = req.user;
