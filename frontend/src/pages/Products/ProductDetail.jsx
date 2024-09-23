@@ -57,7 +57,6 @@ const Products = () => {
         },
         { withCredentials: true }
       );
-      setCart(response.data);
       fetchCart();
       // Llamar a fetchCart después de agregar el producto
     } catch (error) {
